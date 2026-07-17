@@ -1,29 +1,24 @@
-LMDI matrix verified: dual-implementation, 45 pairs, residuals ~1e-13
+Improvement 1 complete: FW boundary comparison verified (MATLAB vs Python)
 
-- New AE_run_LMDI_matrix.m: LMDI-I over the 15 gear-verified matrix
-  files (tag tesla-matrix-complete-v26). No simulation: loads verified
-  results with gear-provenance asserts. Computes 30 cross-cycle pairs
-  (within gear) + 15 cross-gear pairs (within cycle).
-- Method decisions (F.S.K., 17 Jul): CRG torque-dependent FW boundary
-  for regime classification; regen binned by speed (torque magnitude
-  from |Pb|/(eta*omega)); sub-1% regimes folded into adjacent; zero
-  regimes handled with the fully-structural convention (Ang & Liu
-  limit) — naive eps-substitution blows residuals and was rejected.
-- AE_regime_binning.m is the single classification source;
-  AE_lmdi_decomposition.m delegates to it. AE_run_LMDI.m deprecated
-  (re-ran sims, missing WLTP mat, 3 cycles / 1 gear).
-- FW_onset_curve_v2.mat: adds the true T=0 breakpoint (8064.03 rpm =
-  109.6 km/h at g=9.04) extracted from IPMSM_CurrentRef_LUT.mat with
-  the same Id-departure methodology (reproduces every v1 breakpoint to
-  0.01 rpm). Fixes a sub-22 Nm extrapolate-vs-clamp ambiguity that the
-  MATLAB-vs-Python cross-check caught (up to 7 pp FW-share shift on
-  light-load cycles).
-- Verification: independent Python prototype reproduced by MATLAB on
-  every per-cell value and all 45 pairs to 0.01 Wh/km; max residual
-  1.4e-13. Reference tables: scripts/lmdi/LMDI_expected_values.md.
+- FW_boundary_comparison.m: re-bins 5 verified g=9.04 files under 5
+  boundary variants (M1_370, M2_370, M3_350, M3_370, M3_400). Uses
+  the same shared infrastructure as AE_run_LMDI_matrix.m (regime
+  binning, folding, zero-regime handling). No simulation.
+- FW_boundary_variants.mat: 5 onset curves (42 breakpoints each) on
+  tq_grid 0-900 Nm. M1: constant back-EMF limit. M2: d-q voltage at
+  id=0. M3: CRG Id-departure at 350/370/400 V.
+- FW_boundary_expected_values.md: Python prototype cross-check targets.
+- FW_boundary_comparison.mat: 5 variants x 5 cycles + 60 LMDI pairs.
+- AE_fold_regimes.m, AE_lmdi_pair.m: shared functions extracted from
+  AE_run_LMDI_matrix.m (17 Jul), now used by both matrix runner and
+  boundary comparison. Bodies identical to the verified versions.
 
-Headline results (motor level, g=9.04): UDDS->US06 +53.1 Wh/km, 78%
-structural; UDDS->Artemis +66.0, 80% structural; UDDS->HWFET pure
-intensity (both cycles fully MTPA). Definitional reconciliations for
-Section 4 documented (CRG classifier vs 117.6 km/h threshold; motor
-vs BMS level).
+Headline result (Paper Section 2.X): US06 FW share ranges from 6.4%
+(M1) to 36.3% (M3_370). UDDS->US06 structural share: 20.9% (M1) vs
+77.6% (M3_370) -- a 57 pp swing from boundary method alone. Voltage
+sensitivity: M3 at 350/370/400 V gives 102.5/77.6/42.2% structural.
+All 60 LMDI pairs have residuals < 7.1e-14 Wh/km. Cross-check against
+Python prototype passes to < 0.005 Wh/km on every variant.
+
+Dashboard updated with Section 06C (FW boundary tables), Improvement 1
+marked Done, file status entries added, footer updated.
