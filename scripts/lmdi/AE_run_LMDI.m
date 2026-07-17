@@ -1,5 +1,12 @@
 %% AE_run_LMDI.m — LMDI-I Decomposition (Paper B, Applied Energy)
 %
+%  *** DEPRECATED 17 Jul 2026 — do not run. ***
+%  Superseded by AE_run_LMDI_matrix.m, which loads the 15 gear-verified
+%  matrix files (tag tesla-matrix-complete-v26) instead of re-running
+%  simulations, covers all 3 gears x 5 cycles, handles zero regimes via
+%  Ang eps-substitution, and bins regen by speed. This script also
+%  depends on model/WLTP_signals.mat which no longer exists.
+%
 %  Cycles   : US06 (600s), HWFET (765s), WLTP Class 3 (1800s)
 %  WLTP     : loaded from saved mat — NO re-run needed
 %  US06/HWFET: lean re-run, signals saved to mat immediately
