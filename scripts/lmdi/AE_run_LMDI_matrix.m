@@ -95,7 +95,7 @@ for gi = 1:3
         end
         R = AE_lmdi_decomposition(D.P_batt, D.v_spd, D.t_batt, ...
                 fw_tq, fw_rpm, eta_drive, wheel_r, gears(gi));
-        R = fold_small_regimes(R, fold_tol);
+        R = AE_fold_regimes(R, fold_tol);
         CELLS{gi,ci} = R;
         fprintf('%-6s %-8s dk=%6.2f km  Net=%6.1f Wh/km  S=[%5.1f %4.1f %5.1f]%%  I=[%6.1f %6.1f %6.1f]\n', ...
             g_names{gi}, c_names{ci}, R.dk, R.Ept, 100*R.S, R.I);
@@ -110,7 +110,7 @@ XCYC = struct('gear',{},'pair',{},'Dt',{},'Ds',{},'Di',{},'R',{});
 for gi = 1:3
     for pp = 1:size(pairs_c,1)
         A = CELLS{gi, pairs_c(pp,1)};  B = CELLS{gi, pairs_c(pp,2)};
-        [Dt, Ds, Di, Rres] = lmdi_pair(A, B, pres_tol);
+        [Dt, Ds, Di, Rres] = AE_lmdi_pair(A, B, pres_tol);
         XCYC(end+1) = struct('gear',g_names{gi}, ...
             'pair',sprintf('%s->%s', c_names{pairs_c(pp,1)}, c_names{pairs_c(pp,2)}), ...
             'Dt',Dt,'Ds',Ds,'Di',Di,'R',Rres); %#ok<SAGROW>
@@ -127,7 +127,7 @@ XGEAR = struct('cycle',{},'pair',{},'Dt',{},'Ds',{},'Di',{},'R',{});
 for ci = 1:5
     for pp = 1:3
         A = CELLS{pairs_g(pp,1), ci};  B = CELLS{pairs_g(pp,2), ci};
-        [Dt, Ds, Di, Rres] = lmdi_pair(A, B, pres_tol);
+        [Dt, Ds, Di, Rres] = AE_lmdi_pair(A, B, pres_tol);
         if abs(Dt) > 1e-9, s_share = 100*Ds/Dt; else, s_share = 0; end
         XGEAR(end+1) = struct('cycle',c_names{ci}, ...
             'pair',sprintf('%s->%s', g_names{pairs_g(pp,1)}, g_names{pairs_g(pp,2)}), ...
@@ -153,49 +153,6 @@ save(out, 'CELLS', 'XCYC', 'XGEAR', 'g_names', 'c_names', 'rlbl', ...
 fprintf('Saved: %s\nComplete: %s\n', out, datestr(now));
 
 %% ========================================================================
-function R = fold_small_regimes(R, fold_tol)
-% Fold regimes with distance share < fold_tol into the adjacent regime
-% (FW -> Trans -> MTPA), then recompute S, I, e. Documented in methods.
-    for r = [3 2]
-        if R.S(r) > 0 && R.S(r) < fold_tol
-            R.d(r-1) = R.d(r-1) + R.d(r);   R.d(r) = 0;
-            R.E(r-1) = R.E(r-1) + R.E(r);   R.E(r) = 0;
-        end
-    end
-    for r = 1:3
-        R.S(r) = R.d(r) / R.dk;
-        if R.d(r) > 0.001, R.I(r) = R.E(r) / R.d(r); else, R.I(r) = 0; end
-        R.e(r) = R.S(r) * R.I(r);
-    end
-end
-
-function [Dt, Ds, Di, Rres] = lmdi_pair(A, B, pres_tol)
-% Additive LMDI-I over e(r) = S(r)*I(r), exact zero-regime handling:
-%   both present    -> standard log-mean terms
-%   emerging in B   -> +e_B(r) fully structural (intensity-unchanged
-%                      convention, Ang & Liu 2007 limit)
-%   disappearing    -> -e_A(r) fully structural
-% Residual is machine-precision zero by construction (verified 17 Jul
-% 2026 across all 25 matrix pairs in the Python prototype).
-    Ds = 0; Di = 0;
-    for r = 1:3
-        pA = A.S(r) > pres_tol;  pB = B.S(r) > pres_tol;
-        if ~pA && ~pB, continue; end
-        if pA && pB
-            eA = A.e(r); eB = B.e(r);
-            if abs(eB - eA) < 1e-12
-                L = eA;
-            else
-                L = (eB - eA) / (log(eB) - log(eA));
-            end
-            Ds = Ds + L * log(B.S(r)/A.S(r));
-            Di = Di + L * log(B.I(r)/A.I(r));
-        elseif pB
-            Ds = Ds + B.e(r);
-        else
-            Ds = Ds - A.e(r);
-        end
-    end
-    Dt   = sum(B.e) - sum(A.e);
-    Rres = Dt - Ds - Di;
-end
+%  Local functions fold_small_regimes and lmdi_pair were extracted to
+%  AE_fold_regimes.m and AE_lmdi_pair.m (17 Jul 2026) so that
+%  FW_boundary_comparison.m shares the identical verified code.

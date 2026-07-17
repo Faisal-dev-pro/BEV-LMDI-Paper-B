@@ -1,24 +1,21 @@
-Improvement 1 complete: FW boundary comparison verified (MATLAB vs Python)
+Improvement 9 complete: gear ratio design analysis verified (MATLAB vs Python)
 
-- FW_boundary_comparison.m: re-bins 5 verified g=9.04 files under 5
-  boundary variants (M1_370, M2_370, M3_350, M3_370, M3_400). Uses
-  the same shared infrastructure as AE_run_LMDI_matrix.m (regime
-  binning, folding, zero-regime handling). No simulation.
-- FW_boundary_variants.mat: 5 onset curves (42 breakpoints each) on
-  tq_grid 0-900 Nm. M1: constant back-EMF limit. M2: d-q voltage at
-  id=0. M3: CRG Id-departure at 350/370/400 V.
-- FW_boundary_expected_values.md: Python prototype cross-check targets.
-- FW_boundary_comparison.mat: 5 variants x 5 cycles + 60 LMDI pairs.
-- AE_fold_regimes.m, AE_lmdi_pair.m: shared functions extracted from
-  AE_run_LMDI_matrix.m (17 Jul), now used by both matrix runner and
-  boundary comparison. Bodies identical to the verified versions.
+- AE_gear_design.m: extracts design chart data from 15 verified BMS files
+  and LMDI_matrix_results.mat. BMS net Wh/km, FW distance share, gear
+  penalty deltas, marginal penalty per unit ratio, superlinearity metric,
+  FW onset speed, critical gear ratio, cross-gear LMDI structural shares.
+  No simulation. All cross-checks passed (BMS 0.15, FW 0.15 pp, superlin
+  0.03 tolerance).
+- Gear_design_expected_values.md: Python prototype cross-check targets,
+  updated to MATLAB-authoritative values after verification.
+- gear_design_analysis.mat: all design chart data for Paper Section 5.
 
-Headline result (Paper Section 2.X): US06 FW share ranges from 6.4%
-(M1) to 36.3% (M3_370). UDDS->US06 structural share: 20.9% (M1) vs
-77.6% (M3_370) -- a 57 pp swing from boundary method alone. Voltage
-sensitivity: M3 at 350/370/400 V gives 102.5/77.6/42.2% structural.
-All 60 LMDI pairs have residuals < 7.1e-14 Wh/km. Cross-check against
-Python prototype passes to < 0.005 Wh/km on every variant.
+Key findings (Paper Section 5):
+  Superlinear penalty on high-speed cycles: 1.60x on Artemis MW130.
+  Critical gear ratio g_crit(US06) = 8.25, g_crit(Artemis) = 8.07.
+  Tesla g=9.04 is above g_crit for US06: 36.3% FW share, rising to
+  79.1% at g=11. Cross-gear LMDI structural shares >100% on aggressive
+  cycles (re-partitioning effect). UDDS counter-case: no FW at any
+  tested ratio, penalty linear and modest (1.3 Wh/km per unit ratio).
 
-Dashboard updated with Section 06C (FW boundary tables), Improvement 1
-marked Done, file status entries added, footer updated.
+Dashboard updated: Improvement 9 Done, F5/F6 Data Ready, KPI 5/12.
