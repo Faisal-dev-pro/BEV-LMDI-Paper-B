@@ -99,58 +99,86 @@ Wh_km_bms_regen = E_bms_regen_Wh / dist_km;
 Wh_km_bms_net   = E_bms_net_Wh / dist_km;
 bms_regen_pct   = 100 * E_bms_regen_Wh / E_bms_gross_Wh;
 
+% Reference-only mode: no ANL test exists for this cycle/gear combination,
+% so BMS.*_target values are references (e.g. another gear ratio), NOT
+% validation targets. Set BMS.is_reference = true in the run script.
+is_ref = isfield(BMS, 'is_reference') && BMS.is_reference;
+
 fprintf('BMS-level results:\n');
-fprintf('  Gross: %.1f Wh/km  (target %.1f, accept %.0f-%.0f)\n', ...
-    Wh_km_bms_gross, BMS.gross_target, BMS.gross_lo, BMS.gross_hi);
-fprintf('  Regen: %.1f Wh/km (%.1f%%)\n', Wh_km_bms_regen, bms_regen_pct);
-fprintf('         (target %.1f%%, accept %.1f-%.1f%%)\n', ...
-    BMS.regen_pct, BMS.regen_lo, BMS.regen_hi);
-fprintf('  Net:   %.1f Wh/km  (target %.1f, accept %.0f-%.0f)\n', ...
-    Wh_km_bms_net, BMS.net_target, BMS.net_lo, BMS.net_hi);
+if is_ref
+    fprintf('  Gross: %.1f Wh/km  (reference %.1f)\n', ...
+        Wh_km_bms_gross, BMS.gross_target);
+    fprintf('  Regen: %.1f Wh/km (%.1f%%)  (reference %.1f%%)\n', ...
+        Wh_km_bms_regen, bms_regen_pct, BMS.regen_pct);
+    fprintf('  Net:   %.1f Wh/km  (reference %.1f)\n', ...
+        Wh_km_bms_net, BMS.net_target);
+else
+    fprintf('  Gross: %.1f Wh/km  (target %.1f, accept %.0f-%.0f)\n', ...
+        Wh_km_bms_gross, BMS.gross_target, BMS.gross_lo, BMS.gross_hi);
+    fprintf('  Regen: %.1f Wh/km (%.1f%%)\n', Wh_km_bms_regen, bms_regen_pct);
+    fprintf('         (target %.1f%%, accept %.1f-%.1f%%)\n', ...
+        BMS.regen_pct, BMS.regen_lo, BMS.regen_hi);
+    fprintf('  Net:   %.1f Wh/km  (target %.1f, accept %.0f-%.0f)\n', ...
+        Wh_km_bms_net, BMS.net_target, BMS.net_lo, BMS.net_hi);
+end
 
 %% 7. Pass/Fail
-pass_gross = Wh_km_bms_gross >= BMS.gross_lo && Wh_km_bms_gross <= BMS.gross_hi;
-pass_regen = bms_regen_pct >= BMS.regen_lo && bms_regen_pct <= BMS.regen_hi;
-pass_net   = Wh_km_bms_net >= BMS.net_lo && Wh_km_bms_net <= BMS.net_hi;
-
-fprintf('\nValidation gates:\n');
-fprintf('  V1 BMS gross: %s  (%.1f vs %.1f +/- 5%%)\n', ...
-    tf2str(pass_gross), Wh_km_bms_gross, BMS.gross_target);
-fprintf('  V2 BMS regen%%: %s  (%.1f%% vs %.1f%% +/- 3pp)\n', ...
-    tf2str(pass_regen), bms_regen_pct, BMS.regen_pct);
-fprintf('  V3 BMS net: %s  (%.1f vs %.1f +/- 5%%)\n', ...
-    tf2str(pass_net), Wh_km_bms_net, BMS.net_target);
-
-if pass_gross && pass_regen && pass_net
-    fprintf('\n*** ALL GATES PASS — BMS-LEVEL VALIDATION ACHIEVED ***\n');
+if is_ref
+    fprintf('\nValidation gates: SKIPPED — reference values only.\n');
+    fprintf('No ANL target exists for this configuration. Comparison\n');
+    fprintf('numbers above are informational, NOT a validation claim.\n');
 else
-    fprintf('\n*** SOME GATES FAILED — see above ***\n');
+    pass_gross = Wh_km_bms_gross >= BMS.gross_lo && Wh_km_bms_gross <= BMS.gross_hi;
+    pass_regen = bms_regen_pct >= BMS.regen_lo && bms_regen_pct <= BMS.regen_hi;
+    pass_net   = Wh_km_bms_net >= BMS.net_lo && Wh_km_bms_net <= BMS.net_hi;
+
+    fprintf('\nValidation gates:\n');
+    fprintf('  V1 BMS gross: %s  (%.1f vs %.1f +/- 5%%)\n', ...
+        tf2str(pass_gross), Wh_km_bms_gross, BMS.gross_target);
+    fprintf('  V2 BMS regen%%: %s  (%.1f%% vs %.1f%% +/- 3pp)\n', ...
+        tf2str(pass_regen), bms_regen_pct, BMS.regen_pct);
+    fprintf('  V3 BMS net: %s  (%.1f vs %.1f +/- 5%%)\n', ...
+        tf2str(pass_net), Wh_km_bms_net, BMS.net_target);
+
+    if pass_gross && pass_regen && pass_net
+        fprintf('\n*** ALL GATES PASS — BMS-LEVEL VALIDATION ACHIEVED ***\n');
+    else
+        fprintf('\n*** SOME GATES FAILED — see above ***\n');
+    end
 end
 
 %% 8. Energy waterfall
 fprintf('\nEnergy waterfall (Wh/km):\n');
 fprintf('  Motor gross:     %.1f\n', E_motor_gross_Wh / dist_km);
-fprintf('  + Auxiliary:     +%.1f\n', P_aux_W * t_batt(end) / 3600 / dist_km);
+fprintf('  + Auxiliary:     +%.1f\n', ...
+    sum(P_aux(P_bms > 0)) * dt / 3600 / dist_km);
 fprintf('  + Cable I2R:     +%.1f\n', ...
     sum(P_cable(P_bms > 0)) * dt / 3600 / dist_km);
 fprintf('  = BMS gross:     %.1f\n', Wh_km_bms_gross);
 fprintf('\n');
 fprintf('  Motor regen:     %.1f\n', E_motor_regen_Wh / dist_km);
 fprintf('  - Aux during regen: -%.1f\n', ...
-    sum(P_aux(P_motor < 0)) * dt / 3600 / dist_km);
+    sum(P_aux(P_bms < 0)) * dt / 3600 / dist_km);
 fprintf('  - Cable I2R regen:  -%.1f\n', ...
     sum(P_cable(P_bms < 0)) * dt / 3600 / dist_km);
 fprintf('  = BMS regen:     %.1f\n', Wh_km_bms_regen);
 
 %% 9. Save
+% Gear ratio is embedded in BOTH the filename and the struct so a file
+% can never masquerade as a different gear configuration (July 2026
+% Artemis g=9.04 contamination incident).
+if ~exist('gear_ratio', 'var') || isempty(gear_ratio)
+    gear_ratio = NaN;
+    fprintf('\nWARNING: gear_ratio not in workspace. Saved as NaN.\n');
+end
 v26_dir = fileparts(mfilename('fullpath'));
 if isempty(v26_dir), v26_dir = pwd; end
-save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_%s.mat', cycle, ...
-    datestr(now, 'yyyymmdd_HHMMSS')));
+save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_g%.2f_%s.mat', cycle, ...
+    gear_ratio, datestr(now, 'yyyymmdd_HHMMSS')));
 save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'E_bms_gross_Wh', 'E_bms_regen_Wh', 'E_bms_net_Wh', ...
     'Wh_km_bms_gross', 'Wh_km_bms_net', 'bms_regen_pct', ...
-    'dist_km', 'cycle', 'BMS');
+    'dist_km', 'cycle', 'BMS', 'gear_ratio');
 fprintf('\nBMS results saved: %s\n', save_name);
 
 %% LOCAL

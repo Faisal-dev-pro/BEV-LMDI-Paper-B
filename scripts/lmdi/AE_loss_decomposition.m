@@ -21,9 +21,9 @@ function L = AE_loss_decomposition(Pb, vS, t, regime, params)
 %    regime - per-timestep regime assignment [N x 1]: 1=MTPA, 2=Trans, 3=FW
 %    params - struct with fields:
 %               .m          test mass [kg]          (default 1928)
-%               .A_rl       road load constant [N]  (default 178)
-%               .B_rl       road load linear  [N.s/m] (default 3.024)
-%               .C_rl       road load quad    [N.s^2/m^2] (default 0.370)
+%               .A_rl       road load constant [N]  (default 162.0)
+%               .B_rl       road load linear  [N.s/m] (default 0.552)
+%               .C_rl       road load quad    [N.s^2/m^2] (default 0.315)
 %               .eta_gear   gearbox efficiency [-]  (default 0.97)
 %               .V_nom      battery nominal voltage [V] (default 370)
 %               .R_int      battery internal resistance [Ohm] (default 0.05)
@@ -49,9 +49,9 @@ if nargin < 5 || isempty(params), params = struct(); end
 p = @(f,d) params_get(params, f, d);
 
 m       = p('m',       1928);
-A_rl    = p('A_rl',    178);
-B_rl    = p('B_rl',    3.024);
-C_rl    = p('C_rl',    0.370);
+A_rl    = p('A_rl',    162.0);
+B_rl    = p('B_rl',    0.552);
+C_rl    = p('C_rl',    0.315);
 eta_g   = p('eta_gear', 0.97);
 V_nom   = p('V_nom',   370);
 R_int   = p('R_int',   0.05);

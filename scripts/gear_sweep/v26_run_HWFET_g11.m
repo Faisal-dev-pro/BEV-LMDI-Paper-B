@@ -28,13 +28,22 @@ fprintf('1. Gear ratio override: %.1f (baseline 9.04)\n', gear_override);
 mdl   = 'AE_TeslaM3_LMDI';
 cycle = 'HWFET';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
-
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+% Path fix (16 Jul 2026): the old computation resolved scripts/model,
+% which does not exist. Resolve the project root properly, put model/
+% and validation/ on the path, and run with cwd = model/ so InitFcn,
+% caches, and load_system all resolve to the canonical model.
+v26_dir   = fileparts(mfilename('fullpath'));
+proj_root = char(java.io.File(fullfile(v26_dir, '..', '..')).getCanonicalPath());
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('2. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 
@@ -136,10 +145,11 @@ R_cable   = 0.015;
 % BMS struct required by v26_BMS_postprocess.m (no ANL target for g=11.0,
 % use g=9.04 baseline values as reference only — not a pass/fail gate)
 BMS = struct();
-BMS.gross_target  = 134.7;   % g=9.04 baseline (reference)
-BMS.regen_target  = 12.4;
-BMS.net_target    = 122.3;   % g=9.04 baseline (reference)
-BMS.regen_pct     = 9.2;
+BMS.is_reference  = true;    % no ANL target off stock gear; skip PASS/FAIL
+BMS.gross_target  = 129.5;   % g=9.04 verified 17 Jul (reference)
+BMS.regen_target  = 12.6;
+BMS.net_target    = 116.9;   % g=9.04 verified 17 Jul (reference)
+BMS.regen_pct     = 9.8;
 BMS.gross_tol     = 0.20;    % wide tolerance — report only
 BMS.regen_pct_tol = 10.0;
 BMS.net_tol       = 0.20;
@@ -175,6 +185,19 @@ catch ME
 end
 
 %% 12. Save and run
+% Simscape gear ratio literal fix (15 Jul 2026): another sweep script may
+% have saved the model with ITS gear baked into the Simple Gear block as
+% a literal. Set the literal to THIS run's gear before saving, and clear
+% the compiled cache, so the compile cannot inherit a foreign ratio.
+gear_blk = [mdl '/Vehicle_Dynamics/Simple Gear'];
+set_param(gear_blk, 'ratio', sprintf('%.4f', gear_ratio));
+fprintf('    Simple Gear ratio set to literal: %.4f\n', gear_ratio);
+slprj_path = fullfile(fileparts(which(mdl)), 'slprj');
+if exist(slprj_path, 'dir')
+    rmdir(slprj_path, 's');
+    fprintf('    Simscape cache (slprj/) cleared.\n');
+end
+
 save_system(mdl);
 fprintf('\n12. Model saved.\n');
 
@@ -237,12 +260,39 @@ fprintf('    Time above v_FW (%.1f km/h): %.0f s (%.1f%%)\n', ...
     v_FW_mps*3.6, t_above_FW, 100*t_above_FW/C.StopTime);
 fprintf('    Distance in FW: %.2f km (%.1f%%)\n', d_above_FW, fw_dist_pct);
 
+%% 13b. GEAR CONTAMINATION GUARDS (17 Jul 2026)
+% Known HWFET signatures (E_bms_gross_Wh):
+%   g=9.04 verified: 2138.014747529
+%   g=11 PREDICTED:  2223.232382152 (the quarantined 10 Jul run, proven
+%   by inference to be g=11 physics). If THIS verified g=11 run
+%   reproduces it bit-exactly, the contamination story is confirmed to
+%   machine precision and the value gains verified provenance.
+E_ref_g904   = 2138.014747529;
+E_pred_g11   = 2223.232382152;
+
 %% 14. BMS postprocessing
 fprintf('\n14. BMS postprocessing...\n');
 run('v26_BMS_postprocess.m');
 
+if abs(E_bms_gross_Wh - E_ref_g904) < 1e-6
+    error('GEAR GUARD FAILED: bit-identical to the g=9.04 run. DO NOT use.');
+end
+if abs(E_bms_gross_Wh - E_pred_g11) < 1e-6
+    fprintf('    PREDICTION CONFIRMED: bit-identical to the quarantined 10 Jul\n');
+    fprintf('    run (2223.232382 Wh). That run was g=11; this value now has\n');
+    fprintf('    verified provenance. Contamination story proven end to end.\n');
+else
+    fprintf('    NOTE: differs from the 10 Jul prediction by %.6f Wh.\n', ...
+        E_bms_gross_Wh - E_pred_g11);
+    fprintf('    Deterministic reruns should match exactly - investigate before logging.\n');
+end
+
 %% 15. Save results (gear ratio in filename for dashboard)
-save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
+% NOTE: do not use v26_dir here - v26_BMS_postprocess.m overwrites it
+% with its own folder (shared-workspace collision). Use proj_root.
+results_dir = fullfile(proj_root, 'results', sprintf('tesla_g%.1f', gear_ratio));
+if ~exist(results_dir, 'dir'), mkdir(results_dir); end
+save_name = fullfile(results_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
     cycle, gear_ratio, datestr(now, 'yyyymmdd_HHMMSS')));
 save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'E_bms_gross_Wh', 'E_bms_regen_Wh', 'E_bms_net_Wh', ...
@@ -258,11 +308,11 @@ fprintf('\n15. Results saved: %s\n', save_name);
 fprintf('\n========================================================\n');
 fprintf(' HWFET g=11.0 vs g=9.04 COMPARISON\n');
 fprintf('========================================================\n');
-fprintf('  g=9.04 baseline: BMS net 122.3 Wh/km, FW onset 117.6 km/h\n');
+fprintf('  g=9.04 verified (17 Jul): BMS net 116.9 Wh/km, FW onset 117.6 km/h\n');
 fprintf('  g=11.0 result:   BMS net %.1f Wh/km, FW onset %.1f km/h\n', ...
     Wh_km_bms_net, v_FW*3.6);
-fprintf('  Delta: %+.1f Wh/km (structural effect from regime shift)\n', ...
-    Wh_km_bms_net - 122.3);
+fprintf('  Delta: %+.1f Wh/km (operating-point effect; FW marginal at g=11)\n', ...
+    Wh_km_bms_net - 116.9);
 fprintf('  FW distance share: %.1f%%\n', fw_dist_pct);
 
 fprintf('\n========================================================\n');

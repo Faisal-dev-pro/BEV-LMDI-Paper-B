@@ -25,13 +25,22 @@ fprintf('========================================================\n\n');
 mdl = 'AE_TeslaM3_LMDI';
 cycle = 'WLTP';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
-
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+% Path fix (16 Jul 2026): the old computation resolved scripts/model,
+% which does not exist. Resolve the project root properly, put model/
+% and validation/ on the path, and run with cwd = model/ so InitFcn,
+% caches, and load_system all resolve to the canonical model.
+v26_dir   = fileparts(mfilename('fullpath'));
+proj_root = char(java.io.File(fullfile(v26_dir, '..', '..')).getCanonicalPath());
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('1. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 
@@ -166,6 +175,19 @@ catch ME
 end
 
 %% 11. Save and run
+% Simscape gear ratio literal fix (15 Jul 2026): another sweep script may
+% have saved the model with ITS gear baked into the Simple Gear block as
+% a literal. Set the literal to THIS run's gear before saving, and clear
+% the compiled cache, so the compile cannot inherit a foreign ratio.
+gear_blk = [mdl '/Vehicle_Dynamics/Simple Gear'];
+set_param(gear_blk, 'ratio', sprintf('%.4f', gear_ratio));
+fprintf('    Simple Gear ratio set to literal: %.4f\n', gear_ratio);
+slprj_path = fullfile(fileparts(which(mdl)), 'slprj');
+if exist(slprj_path, 'dir')
+    rmdir(slprj_path, 's');
+    fprintf('    Simscape cache (slprj/) cleared.\n');
+end
+
 save_system(mdl);
 fprintf('\n11. Model saved.\n');
 

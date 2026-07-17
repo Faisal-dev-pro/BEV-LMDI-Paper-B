@@ -28,13 +28,20 @@ fprintf('1. Gear ratio override: %.1f (baseline 9.04)\n', gear_override);
 mdl   = 'AE_TeslaM3_LMDI';
 cycle = 'ArtemisMW130';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
+script_dir = fileparts(mfilename('fullpath'));
+proj_root  = fullfile(script_dir, '..', '..');  % scripts/gear_sweep -> project root
+proj_root  = char(java.io.File(proj_root).getCanonicalPath());
 
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('2. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 
@@ -175,6 +182,19 @@ catch ME
 end
 
 %% 12. Save and run
+% Simscape gear ratio literal fix (15 Jul 2026): another sweep script may
+% have saved the model with ITS gear baked into the Simple Gear block as
+% a literal. Set the literal to THIS run's gear before saving, and clear
+% the compiled cache, so the compile cannot inherit a foreign ratio.
+gear_blk = [mdl '/Vehicle_Dynamics/Simple Gear'];
+set_param(gear_blk, 'ratio', sprintf('%.4f', gear_ratio));
+fprintf('    Simple Gear ratio set to literal: %.4f\n', gear_ratio);
+slprj_path = fullfile(fileparts(which(mdl)), 'slprj');
+if exist(slprj_path, 'dir')
+    rmdir(slprj_path, 's');
+    fprintf('    Simscape cache (slprj/) cleared.\n');
+end
+
 save_system(mdl);
 fprintf('\n12. Model saved.\n');
 
@@ -242,7 +262,9 @@ fprintf('\n14. BMS postprocessing...\n');
 run('v26_BMS_postprocess.m');
 
 %% 15. Save results (gear ratio in filename for dashboard)
-save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
+results_dir = fullfile(proj_root, 'results', sprintf('tesla_g%.1f', gear_ratio));
+if ~exist(results_dir, 'dir'), mkdir(results_dir); end
+save_name = fullfile(results_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
     cycle, gear_ratio, datestr(now, 'yyyymmdd_HHMMSS')));
 save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'E_bms_gross_Wh', 'E_bms_regen_Wh', 'E_bms_net_Wh', ...

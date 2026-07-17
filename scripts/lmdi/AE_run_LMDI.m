@@ -4,21 +4,27 @@
 %  WLTP     : loaded from saved mat — NO re-run needed
 %  US06/HWFET: lean re-run, signals saved to mat immediately
 %
-%  Regime boundaries — derived from AE_TeslaM3_LMDI_Params.m Tmax_env:
-%    Tmax_env is constant 430 Nm from 0-4000 RPM (MTPA zone).
-%    FW begins at 4000 RPM mechanical = 1257 rad/s electrical = 54.4 km/h.
+%  Regime boundaries — CRG-derived, torque-dependent FW onset at V_dc=370V:
+%    The FW onset speed varies with motor torque. At low torque the MTPA
+%    zone extends to higher speed; at peak torque (430 Nm) FW onset is
+%    lowest. The boundary is loaded from FW_onset_curve.mat, extracted
+%    from IPMSM_CurrentRef_LUT.mat at V_dc=370V (ANL CAN average OCV)
+%    with a 10A Id-departure threshold.
 %
-%    omega_base = 1257 rad/s electrical  (<-> 54.4 km/h)  [4000 RPM mech]
-%    omega_fw   = 1.1 * omega_base = 1382.7 rad/s          (<-> 59.8 km/h)
-%    Regime 1 MTPA  : |omega_e| <  1257
-%    Regime 2 Trans : 1257 <= |omega_e| < 1382.7
-%    Regime 3 FW    : |omega_e| >= 1382.7
+%    omega_base (CRG, zero-torque limit) = 906 rad/s mech = 117.6 km/h
+%    V_dc = 370 V (average operating voltage, not 400V fully charged)
+%    Regime 1 MTPA  : RPM < fw_onset(T_motor)
+%    Regime 2 Trans : within 5% buffer band of fw_onset
+%    Regime 3 FW    : RPM >= fw_onset(T_motor) + 5% buffer
 %
 %  Author: F. Shah Khan, University of East London, June 2026
 % -------------------------------------------------------------------------
 
 clear; clc;
-model_dir  = '/Users/fsk/Documents/MATLAB/BEV_LMDI_Decomposition/AppliedEnergy_Paper/model';
+script_dir = fileparts(mfilename('fullpath'));
+proj_root  = fullfile(script_dir, '..', '..');
+proj_root  = char(java.io.File(proj_root).getCanonicalPath());
+model_dir  = fullfile(proj_root, 'model');
 addpath(model_dir);
 cd(model_dir);
 

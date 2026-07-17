@@ -28,13 +28,22 @@ fprintf('1. Gear ratio override: %.1f (baseline 9.04)\n', gear_override);
 mdl   = 'AE_TeslaM3_LMDI';
 cycle = 'ArtemisMW130';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
-
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+% Path fix (16 Jul 2026): the old computation resolved scripts/model,
+% which does not exist. Resolve the project root properly, put model/
+% and validation/ on the path, and run with cwd = model/ so InitFcn,
+% caches, and load_system all resolve to the canonical model.
+v26_dir   = fileparts(mfilename('fullpath'));
+proj_root = char(java.io.File(fullfile(v26_dir, '..', '..')).getCanonicalPath());
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('2. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 
@@ -137,9 +146,10 @@ R_cable   = 0.015;
 % BMS struct required by v26_BMS_postprocess.m (no ANL target for g=11.0,
 % use g=9.04 Artemis values as reference only — not a pass/fail gate)
 BMS = struct();
-BMS.gross_target  = 189.3;   % g=9.04 Artemis value (reference)
-BMS.regen_target  = 30.1;
-BMS.net_target    = 159.2;   % g=9.04 Artemis value (reference)
+BMS.is_reference  = true;    % postprocess skips PASS/FAIL gates (15 Jul audit)
+BMS.gross_target  = 189.9;   % g=9.04 Artemis measured 15 Jul (reference)
+BMS.regen_target  = 30.2;
+BMS.net_target    = 159.7;   % g=9.04 Artemis measured 15 Jul (reference)
 BMS.regen_pct     = 15.9;
 BMS.gross_tol     = 0.20;    % wide tolerance — report only
 BMS.regen_pct_tol = 10.0;
@@ -255,12 +265,41 @@ fprintf('    Time above v_FW (%.1f km/h): %.0f s (%.1f%%)\n', ...
     v_FW_mps*3.6, t_above_FW, 100*t_above_FW/C.StopTime);
 fprintf('    Distance in FW: %.2f km (%.1f%%)\n', d_above_FW, fw_dist_pct);
 
+%% 13b. GEAR CONTAMINATION GUARDS (15 Jul 2026 audit)
+% Guard 1: at g=11.0 the FW onset is 96.7 km/h and Artemis MW130 peaks at
+% 131.8 km/h, so FW time MUST be nonzero (expect > 51.3% distance share,
+% the g=9.04 value, since the onset dropped from 117.6 to 96.7 km/h).
+if t_above_FW <= 0
+    error(['GEAR GUARD FAILED: zero FW time at g=11.0 on a cycle that ', ...
+        'peaks at %.1f km/h (FW onset %.1f km/h). The gear override did ', ...
+        'not reach the simulation. DO NOT use this result.'], ...
+        max(v_spd)*3.6, v_FW_mps*3.6);
+end
+fprintf('    Gear guard 1 PASS: nonzero FW time as required at g=11.0.\n');
+
+% Guard 2: bit-identity references (exact E_bms_gross_Wh from valid runs)
+E_bms_gross_g904_ref = 5456.131410576;  % Artemis g=9.04, 15 Jul
+E_bms_gross_g7_ref   = 5308.927105981;  % Artemis g=7.0, 14 Jul
+
 %% 14. BMS postprocessing
 fprintf('\n14. BMS postprocessing...\n');
 run('v26_BMS_postprocess.m');
 
+% Guard 2 check (needs E_bms_gross_Wh from postprocess)
+if abs(E_bms_gross_Wh - E_bms_gross_g904_ref) < 1e-6
+    error(['GEAR GUARD FAILED: E_bms_gross bit-identical to the g=9.04 ', ...
+        'Artemis run (%.6f Wh). DO NOT use this result.'], E_bms_gross_Wh);
+end
+if abs(E_bms_gross_Wh - E_bms_gross_g7_ref) < 1e-6
+    error(['GEAR GUARD FAILED: E_bms_gross bit-identical to the g=7.0 ', ...
+        'Artemis run (%.6f Wh). DO NOT use this result.'], E_bms_gross_Wh);
+end
+fprintf('    Gear guard 2 PASS: energy differs from g=9.04 and g=7.0 runs.\n');
+
 %% 15. Save results (gear ratio in filename for dashboard)
-save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
+results_dir = fullfile(v26_dir, '..', '..', 'results', 'tesla_g11.0');
+if ~exist(results_dir, 'dir'), mkdir(results_dir); end
+save_name = fullfile(results_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
     cycle, gear_ratio, datestr(now, 'yyyymmdd_HHMMSS')));
 save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'E_bms_gross_Wh', 'E_bms_regen_Wh', 'E_bms_net_Wh', ...
@@ -271,6 +310,17 @@ save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'gear_ratio', 'gear_override', ...
     'v_FW_mps', 'fw_dist_pct', 't_above_FW', 'd_above_FW');
 fprintf('\n15. Results saved: %s\n', save_name);
+
+%% 16. Comparison across all three gear ratios
+fprintf('\n========================================================\n');
+fprintf(' ARTEMIS MW130 GEAR SWEEP COMPARISON\n');
+fprintf('========================================================\n');
+fprintf('  g=7.0  (14 Jul): BMS net 154.0 Wh/km, FW onset 151.9 km/h, FW  0.0%%\n');
+fprintf('  g=9.04 (15 Jul): BMS net 159.7 Wh/km, FW onset 117.6 km/h, FW 51.3%%\n');
+fprintf('  g=11.0 (this):   BMS net %.1f Wh/km, FW onset %.1f km/h, FW %.1f%%\n', ...
+    Wh_km_bms_net, v_FW_mps*3.6, fw_dist_pct);
+fprintf('  Delta g11 - g9.04: %+.1f Wh/km | Delta g11 - g7: %+.1f Wh/km\n', ...
+    Wh_km_bms_net - 159.7, Wh_km_bms_net - 154.0);
 
 fprintf('\n========================================================\n');
 fprintf(' ARTEMIS MW130 g=11.0 COMPLETE — %s\n', datestr(now));

@@ -30,13 +30,22 @@ fprintf('1. Gear ratio override: %.1f (baseline 9.04)\n', gear_override);
 mdl   = 'AE_TeslaM3_LMDI';
 cycle = 'WLTP';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
-
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+% Path fix (16 Jul 2026): the old computation resolved scripts/model,
+% which does not exist. Resolve the project root properly, put model/
+% and validation/ on the path, and run with cwd = model/ so InitFcn,
+% caches, and load_system all resolve to the canonical model.
+v26_dir   = fileparts(mfilename('fullpath'));
+proj_root = char(java.io.File(fullfile(v26_dir, '..', '..')).getCanonicalPath());
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('2. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 

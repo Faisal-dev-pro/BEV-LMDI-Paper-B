@@ -28,13 +28,22 @@ fprintf('1. Gear ratio override: %.1f (baseline 9.04)\n', gear_override);
 mdl   = 'AE_TeslaM3_LMDI';
 cycle = 'UDDS';
 
-v26_dir = fileparts(mfilename('fullpath'));
-if ~isempty(v26_dir), cd(v26_dir); end
-
-model_dir = fullfile(fileparts(v26_dir), 'model');
-addpath(model_dir);
+% Path fix (16 Jul 2026): the old computation resolved scripts/model,
+% which does not exist. Resolve the project root properly, put model/
+% and validation/ on the path, and run with cwd = model/ so InitFcn,
+% caches, and load_system all resolve to the canonical model.
+v26_dir   = fileparts(mfilename('fullpath'));
+proj_root = char(java.io.File(fullfile(v26_dir, '..', '..')).getCanonicalPath());
+addpath(fullfile(proj_root, 'model'));
+addpath(fullfile(proj_root, 'scripts', 'validation'));
+cd(fullfile(proj_root, 'model'));
 
 fprintf('2. Loading model and parameters...\n');
+% Force a FRESH model load: a plain sim() on an already-loaded model can
+% reuse the in-memory compiled Simscape network from a previous run at a
+% DIFFERENT gear ratio, even in Normal mode (15 Jul 2026 incident: UDDS
+% g=11 reused the Artemis g=9.04 compile and produced g=9.04 physics).
+if bdIsLoaded(mdl), bdclose(mdl); end
 load_system(mdl);
 run('AE_TeslaM3_LMDI_Params.m');
 
@@ -136,6 +145,7 @@ R_cable   = 0.015;
 % BMS struct required by v26_BMS_postprocess.m (no ANL target for g=11.0,
 % use g=9.04 baseline values as reference only — not a pass/fail gate)
 BMS = struct();
+BMS.is_reference  = true;    % postprocess skips PASS/FAIL gates (15 Jul audit)
 BMS.gross_target  = 163.7;   % g=9.04 baseline (reference)
 BMS.regen_target  = 53.2;
 BMS.net_target    = 110.6;   % g=9.04 baseline (reference)
@@ -254,12 +264,37 @@ fprintf('    Time above v_FW (%.1f km/h): %.0f s (%.1f%%)\n', ...
     v_FW_mps*3.6, t_above_FW, 100*t_above_FW/C.StopTime);
 fprintf('    Distance in FW: %.2f km (%.1f%%)\n', d_above_FW, fw_dist_pct);
 
+%% 13b. GEAR CONTAMINATION GUARD (corrected 16 Jul 2026)
+% RESOLVED 16 Jul: the 10 Jul UDDS "g=9.04 baseline" actually ran at
+% g=11 (stale gear_override, same July 10 workspace disease as Artemis).
+% Its E_bms_gross (1962.974889 Wh) IS the true g=11 value, confirmed by
+% the 60 s effective-gear diagnostic (74.777 Wh first-minute signature).
+% So for THIS g=11 script, matching 1962.9749 is CONFIRMATION, and the
+% only failure signature is matching the g=7.0 run.
+E_bms_gross_g11_ref = 1962.974889217331;  % UDDS g=11 (verified 16 Jul)
+E_bms_gross_g7_ref  = 1910.007241792;     % UDDS g=7.0, 13 Jul
+
 %% 14. BMS postprocessing
 fprintf('\n14. BMS postprocessing...\n');
 run('v26_BMS_postprocess.m');
 
+% Gear guard
+if abs(E_bms_gross_Wh - E_bms_gross_g7_ref) < 1e-6
+    error(['GEAR GUARD FAILED: E_bms_gross bit-identical to the g=7.0 ', ...
+        'UDDS run (%.6f Wh). DO NOT use this result.'], E_bms_gross_Wh);
+end
+if abs(E_bms_gross_Wh - E_bms_gross_g11_ref) < 1e-6
+    fprintf('    Gear guard PASS: matches the verified g=11 signature.\n');
+else
+    fprintf('    NOTE: differs from the verified g=11 reference by %.6f Wh.\n', ...
+        E_bms_gross_Wh - E_bms_gross_g11_ref);
+    fprintf('    Deterministic reruns should match exactly. Investigate before logging.\n');
+end
+
 %% 15. Save results (gear ratio in filename for dashboard)
-save_name = fullfile(v26_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
+results_dir = fullfile(v26_dir, '..', '..', 'results', 'tesla_g11.0');
+if ~exist(results_dir, 'dir'), mkdir(results_dir); end
+save_name = fullfile(results_dir, sprintf('BMS_%s_v26_g%.1f_%s.mat', ...
     cycle, gear_ratio, datestr(now, 'yyyymmdd_HHMMSS')));
 save(save_name, 'P_batt', 'P_bms', 'I_bms', 't_batt', 'v_spd', ...
     'E_bms_gross_Wh', 'E_bms_regen_Wh', 'E_bms_net_Wh', ...

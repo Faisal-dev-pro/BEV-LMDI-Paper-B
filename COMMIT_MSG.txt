@@ -1,0 +1,34 @@
+Tesla matrix complete: 15/15 cells, 3 gears x 5 cycles, all gear-verified
+
+Gear contamination audit (15-17 Jul 2026):
+- Root cause: stale gear_override in base workspace, picked up by the
+  exist() check in AE_TeslaM3_LMDI_Params.m. All three 10 Jul baselines
+  were victims: Artemis ran at g=7, UDDS and HWFET ran at g=11.
+- Four contaminated result files quarantined with bit-identity proofs
+  (results/quarantine/README.md documents the full audit).
+- The historical HWFET "FAIL +6.9%" was a contamination artifact. True
+  g=9.04 passes all ANL gates: net 116.9 (+2.2%), gross 129.5 (+0.1%),
+  regen 9.8%. Five-cycle ANL validation complete: T1-T13 pass.
+- HWFET g=11 rerun reproduced the quarantined file bit-exactly
+  (2223.232382 Wh), proving the story to machine precision.
+
+Verified matrix (BMS net Wh/km):
+  g=7.0 : UDDS 105.3, HWFET 112.1, US06 143.3, WLTP 122.2, Artemis 154.0
+  g=9.04: UDDS 108.1, HWFET 116.9, US06 148.7, WLTP 126.6, Artemis 159.7
+  g=11.0: UDDS 110.6, HWFET 122.3, US06 155.1, WLTP 131.5, Artemis 168.5
+  Every row monotone; g9.04->11 deltas ordered by FW exposure
+  (UDDS 2.5 ... Artemis 8.8, FW share 0% -> 81.9%).
+
+Hardening added to all run scripts:
+- Explicit gear_override; bdclose + fresh load_system; Simple Gear
+  literal per run (restored after); slprj cleared; Normal mode
+- Gear guards: bit-identity refs + first-60s signatures + FW assertions
+- Path fix: proj_root resolution + cd model/ (old scripts/model bug)
+- Postprocess: gear_ratio in filename+struct, is_reference mode,
+  waterfall aux masked on P_bms sign; save paths avoid v26_dir clobber
+- diag_gear_effective.m: measures effective gear (omega*r/v) in 60 s
+
+New verified results: Artemis g9.04 (159.7, FW 51.3%), UDDS g9.04
+(108.1, T12 -0.8%), HWFET g9.04/g7/g11, Artemis g11 (168.5), UDDS g11
+(110.6). LMDI road load defaults corrected to ANL coastdown
+162.0/0.552/0.315; voltage documentation block added to params.

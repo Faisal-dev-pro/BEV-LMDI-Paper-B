@@ -29,11 +29,21 @@ P.motor.Jm    = 0.05;         % [E] rotor inertia [kg·m²]
 P.motor.tref  = 200;          % torque reference for step tests [N·m]
 
 % ----- High-voltage system: Tesla Model 3 LR pack ---------------------
-P.batt.Vnom   = 400;          % [V] nominal DC voltage (96s × 4.2 V)
+%  Pack voltage levels (96 series NCA 2170 cells):
+%    V_max   = 96 x 4.2 = 403 V  (fully charged, SOC ~ 100%)
+%    V_nom   = 96 x 3.7 = 355 V  (cell nominal)
+%    V_oc    = 370 V              (ANL CAN bus avg, warm phases 4-7)
+%
+%  P.batt.Vnom = 400 V is the Simscape battery block parameter.
+%  For the CRG field-weakening boundary, V_dc = 370 V is used (average
+%  operating voltage under load). This gives omega_base = 906 rad/s and
+%  v_FW = 117.6 km/h at g=9.04. Using V_max = 400 V would give
+%  v_FW ~ 127 km/h and understate FW operation. See ANL_Model_Initialization.m.
+P.batt.Vnom   = 400;          % [V] Simscape block voltage (~ V_max, 96s x 4.2 V)
 P.batt.V1     = 330;          % [E] discharge curve knee [V]
 P.batt.Cdc    = 0.001;        % [E] DC-link capacitor [F]
 P.batt.kWh    = 75;           % [V] pack energy capacity [kWh]
-P.batt.Ah     = 75e3 / 370;   % [D] ~202.7 Ah
+P.batt.Ah     = 75e3 / 370;   % [D] ~202.7 Ah (at V_oc = 370 V)
 P.batt.SOC0   = 95;           % [V] initial SOC [%]  — ANL test start condition
 P.batt.Rint   = 0.05;         % [E] pack internal resistance [Ohm]
 
