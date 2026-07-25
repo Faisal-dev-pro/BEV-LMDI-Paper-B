@@ -1232,7 +1232,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 </div>
 
 <div class="card">
-<div class="card-label">Cross-Vehicle Contrast: UDDS&rarr;US06</div>
+<div class="card-label">Cross-Vehicle Contrast: UDDS&rarr;US06 (within-vehicle)</div>
 <table>
 <thead><tr><th>Vehicle</th><th>Delta Wh/km</th><th>Structural</th><th>Intensity</th><th>S share</th><th>UDDS S_FW</th><th>US06 S_FW</th></tr></thead>
 <tbody>
@@ -1240,9 +1240,22 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 <tr><td><strong>Bolt g=7.05</strong></td><td class="mono">+69.7</td><td class="mono">+38.2</td><td class="mono">+31.5</td><td class="mono">54.9%</td><td class="mono">20.3%</td><td class="mono">89.5%</td></tr>
 </tbody>
 </table>
-<div class="alert alert-info" style="margin-top:10px;margin-bottom:0">
-  <span class="alert-icon">&#9432;</span>
-  <span><strong>Why Bolt structural share is lower:</strong> The Bolt already has 20.3% FW on UDDS (max speed 91.2 &gt; v_FW 88.4 km/h), so the UDDS&rarr;US06 regime shift is smaller than Tesla's (0%&rarr;36.3%). But Bolt's total delta is larger (+69.7 vs +53.1) because FW intensity is much higher (175.8 vs comparable Tesla values). Motor design, not gear ratio, determines FW exposure.</span>
+</div>
+
+<div class="card">
+<div class="card-label">Cross-Vehicle LMDI-I: Tesla (g=9.04) &rarr; Bolt (g=7.05) &mdash; same cycle</div>
+<table>
+<thead><tr><th>Cycle</th><th>Delta Wh/km</th><th>Structural</th><th>Intensity</th><th>S share</th><th>Residual</th></tr></thead>
+<tbody>
+<tr><td>UDDS</td><td class="mono">+14.96</td><td class="mono">+8.55</td><td class="mono">+6.41</td><td class="mono">57.2%</td><td class="mono">6.3e-14</td></tr>
+<tr><td>HWFET</td><td class="mono">+18.02</td><td class="mono">+17.86</td><td class="mono">+0.17</td><td class="val-pass">99.1%</td><td class="mono">9.4e-15</td></tr>
+<tr><td>US06</td><td class="mono">+31.60</td><td class="mono">+27.83</td><td class="mono">+3.77</td><td class="val-pass">88.1%</td><td class="mono">-4.4e-14</td></tr>
+<tr><td>WLTP</td><td class="mono">+23.47</td><td class="mono">+22.94</td><td class="mono">+0.53</td><td class="val-pass">97.7%</td><td class="mono">-1.1e-14</td></tr>
+</tbody>
+</table>
+<div class="alert alert-success" style="margin-top:10px;margin-bottom:0">
+  <span class="alert-icon">&#10003;</span>
+  <span><strong>Cross-vehicle LMDI verified.</strong> Max |residual| = 6.3e-14. On every cycle, the Bolt consumes more energy than the Tesla at motor level. The dominant cause is structural (88&ndash;99% on HWFET/US06/WLTP): the Bolt spends far more distance in FW. On UDDS the structural share drops to 57% because the Bolt's FW onset (88.4 km/h) just barely touches UDDS max speed. Saved: cross_vehicle_LMDI_results.mat.</span>
 </div>
 </div>
 
@@ -1460,7 +1473,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
     <span>BEV LMDI Decomposition &middot; Paper B</span>
     <span>AppliedEnergy_Paper/PaperB_Dashboard.html</span>
   </div>
-  <span>Updated 25 Jul 2026 &middot; 12/12 improvements done &middot; TESLA 15/15 &middot; BOLT 4/4 PASS &middot; Bolt LMDI done &middot; Remaining: cross-vehicle pairs, figures, writing</span>
+  <span>Updated 25 Jul 2026 &middot; 12/12 improvements done &middot; TESLA 15/15 &middot; BOLT 4/4 PASS &middot; Bolt LMDI + cross-vehicle done &middot; Remaining: figures, writing</span>
 </div>
 
 </div><!-- .container -->
