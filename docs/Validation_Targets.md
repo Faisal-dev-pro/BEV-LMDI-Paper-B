@@ -110,27 +110,43 @@ HWFET ~112/119/128, WLTP ~108/117/130, US06 ~118/133/152 at g=7.0/9.04/11.0.
 
 ## 5. Chevrolet Bolt EV (g = 7.05) — validation targets
 
-### 5a. ANL net energy targets, PROVISIONAL
+### 5a. ANL net energy targets
 
-Computed from the test summary PDF net Wh per phase divided by nominal bag
-distances; phase-to-cycle mapping inferred from energy magnitudes. MUST be
-confirmed by TDMS phase segmentation (Drive_Trace_Schedule / Test_active
-channels) before use as manuscript numbers. Battery level (Hioki P1), not
-inverter level: includes inverter and DCDC/12V loads, unlike Tesla WP4.
+Primary targets from 2020 Bolt EV test 62009019 (Hioki WP1, 23-25C,
+SOC 97.3%, room temperature). Same powertrain as 2019 (motor, battery,
+gear ratio unchanged MY2020). TXT format with direct motor CAN channels
+(Motor_1_torque_DMCM1, Motor_1_speed_DMCM1). 2019 TDMS values retained
+as cross-check (delta column). Updated 19 July 2026.
 
-Extracted directly from TDMS Exhaust_Bag segmentation (integer bags,
-fractional transitions excluded, per-sample integration) on 5 July 2026.
-Battery level (Hioki P1). Scripts output: Results/Bolt_619xxxxx_bags.csv.
+**UDDS target corrected 24 July 2026 (twice).** Original C1 (106.7
+Wh/km) was wrong: cold bags 1+2 instead of warm bags 4+5, and HPCM CAN
+channel instead of Hioki WP1. First correction set 99.6 from Hioki P1
+(real-time power), but HWFET and US06 targets use Hioki WP1 (cumulative
+counter). Second correction aligns UDDS to WP1 for channel consistency.
 
-| # | Quantity | Target | Accept (+/-5%) | Source | Status |
-|---|----------|--------|----------------|--------|--------|
-| C1 | UDDS net Wh/km | 109.7 +/- 2.5 (107.7, 112.5, 109.0) | 104-115 | TDMS bags, 3 sequences | LOCKED |
-| C1a | UDDS regen fraction (battery level) | 31.5% (30.7-32.1) | 28-35% | same | LOCKED |
-| C2 | HWY net Wh/km | 124.0 (123.0, 125.1) | 118-130 | TDMS bag 3, 2 tests | LOCKED |
-| C3 | US06 net Wh/km | 176.4 (gross 223.0; city bag 193.3, hwy bag 171.6) | 168-185 | 61910021 bags 6+7, n=1 | LOCKED (single test) |
-| C3a | US06 regen fraction (battery level) | 20.9% | 18-24% | same | LOCKED (single test) |
-| C4 | WLTP net Wh/km | 136.3 (runs 137.1, 135.5); sub-phases Low 104.0, Med 107.7, High 122.0, ExHigh 177.0 | +/-5% each | 61911001, WLTP x2 | LOCKED |
-| C4a | WLTP regen fraction | 23.3% | 20-27% | same | LOCKED |
+Full audit (bags 4+5, warm UDDS, test 62009019):
+  Hioki P1 (real-time power integration): 100.28 Wh/km
+  WP1 (cumulative counter):              101.88 Wh/km  ← TARGET
+  CAN V×I (HPCM current × CAN voltage):  102.62 Wh/km
+  Hioki V×I (cross-check):               100.23 Wh/km
+
+Channel consistency check (WP1 vs existing targets):
+  HWFET: WP1 = 125.16, target = 125.2 (match)
+  US06:  WP1 = 167.78, target = 167.8 (match)
+  UDDS:  WP1 = 101.88, target = 101.9 (corrected)
+
+Cold-warm delta (Hioki P1): 105.1 cold vs 100.3 warm = +4.8 Wh/km.
+Cross-check 62009003 warm UDDS = 104.0 (SOC ~60%, higher R_int).
+
+| # | Quantity | Target | Accept (+/-5%) | Source | 2019 cross-check | Status |
+|---|----------|--------|----------------|--------|------------------|--------|
+| C1 | UDDS net Wh/km | 101.9 | 96.8-107.0 | 2020 62009019 warm UDDS (bags 4+5), Hioki WP1 = 101.88, SOC 91% | 62009003 warm 104.0 (SOC 60%) | PASS — Simscape 105.9 (+3.9%) |
+| C1a | UDDS regen fraction (battery level) | 34.6% | 30-40% | 2020 62009019 warm UDDS WP1 gross/regen (Hioki P1 = 35.1%) | 62009003 warm 33.8% | LOCKED |
+| C2 | HWY net Wh/km | 125.2 | 119-131 | 2020 62009019 HWY1, Hioki WP1 | 124.0 (2 tests) | LOCKED |
+| C3 | US06 net Wh/km | 167.8 (city 162.4, hwy 169.3) | 159-176 | 2020 62009019 US06 combined, Hioki WP1 | 176.4 (single 2019 test) | LOCKED |
+| C3a | US06 regen fraction (battery level) | 23.9% | 19-29% | 2020 62009019 Hioki gross/regen | 20.9% (2019) | LOCKED |
+| C4 | WLTP net Wh/km | 136.3 (runs 137.1, 135.5); sub-phases Low 104.0, Med 107.7, High 122.0, ExHigh 177.0 | +/-5% each | 2019 61911001 WLTP x2 (no 2020 WLTP data) | N/A | LOCKED |
+| C4a | WLTP regen fraction | 23.3% | 20-27% | same | N/A | LOCKED |
 | C5 | Bolt regen strategy note | Battery-level regen fractions are structurally lower than Tesla inverter-level (21% vs 43% on US06); reflects measurement boundary and possibly drive mode. Confirm drive mode from Trans_regen_button_pos_CAN / Veh_drive_mode_CAN before modelling Bolt lift-off decel | | TDMS | OPEN |
 | C6 | Regen decel characterisation | from 61911007 (8 phases) | calibrates Bolt lift-off decel rule (Bolt analogue of 0.15g) | TDMS | PENDING |
 | C7 | Road load coefficients | F = 126.3 + 2.008v + 0.4336v^2 (lit.) | verify against coastdowns 61911008 | Allca-Pekarovic Table III; ANL | PROVISIONAL |
@@ -182,7 +198,7 @@ reads CAN, so model accuracy at BMS is the binding requirement.
 | Tesla g=7.0 | plausibility only | plausibility only | plausibility only | plausibility only | no target |
 | Tesla g=9.04 (v26) | T12/T13 PENDING | T4/T5 PASS (BMS 116.8, 9.8%) | T1/T2/T3/T14 PASS (BMS net 148.7, regen 29.4%) | T6/T7 PENDING | no target (report only) |
 | Tesla g=11.0 | plausibility only | plausibility only | plausibility only | plausibility only | no target |
-| Bolt g=7.05 | C1 | C2 | C3/C5 | C4 | no target |
+| Bolt g=7.05 | C1 PASS (105.9, +3.9%) | C2 PASS (127.8, +2.1%) | C3 PASS (172.7, +2.9%) | C4 PASS (138.2, +1.4%) | no target |
 
 Off-baseline gear ratios have no measured counterpart; they are validated
 indirectly through the g=9.04 anchor plus the locked motor model, and

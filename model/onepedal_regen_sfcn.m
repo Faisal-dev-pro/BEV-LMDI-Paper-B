@@ -87,7 +87,16 @@ function Output(block)
     rw             = 0.326;         % [m]  wheel radius
     gear           = evalin('base', 'gear_ratio');  % [-] from AE_TeslaM3_LMDI_Params.m
     regen_minSpeed = 1.39;          % [m/s] ~5 km/h cutoff
-    P_regen_max    = 60000;         % [W]  max regen power (mechanical)
+
+    % P_regen_max: nominal 60000 W, unless a sensitivity-sweep override
+    % (P_regen_max_sens) has been placed in the base workspace. Mirrors the
+    % gear_ratio pattern above. Absent override -> identical to all prior
+    % behaviour (Improvement 6, sensitivity/uncertainty analysis).
+    if evalin('base', 'exist(''P_regen_max_sens'',''var'')')
+        P_regen_max = evalin('base', 'P_regen_max_sens');  % [W]
+    else
+        P_regen_max = 60000;         % [W]  max regen power (mechanical), nominal
+    end
 
     % ---- Road load force at current speed ----
     F_road = A_rl + B_rl * v_ref + C_rl * v_ref^2;

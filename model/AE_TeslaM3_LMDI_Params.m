@@ -49,6 +49,9 @@ P.batt.Rint   = 0.05;         % [E] pack internal resistance [Ohm]
 
 % ----- Vehicle (Tesla Model 3 LR, ANL coastdown-fitted) ----------------
 P.veh.mass    = 1928;         % [V] test mass [kg]  (curb 1847 + 81 kg ballast)
+if exist('mass_override', 'var') && ~isempty(mass_override)
+    P.veh.mass = mass_override;   % Improvement 6 sensitivity sweep (m_test)
+end
 P.veh.rw      = 0.326;        % [V] tyre rolling radius [m]  235/45R18
 P.veh.A       = 2.22;         % [E] frontal area [m²]
 %

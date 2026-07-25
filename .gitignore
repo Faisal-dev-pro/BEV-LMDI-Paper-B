@@ -53,6 +53,14 @@ results/tesla_g7.0/BMS_ArtemisMW130_v26_g7.0_*.mat
 # g=11.0 stale WLTP (keep 20260714 only)
 results/tesla_g11.0/BMS_WLTP_v26_g11.0_20260711_133350.mat
 
+# === Raw ANL test data (large, proprietary) ===
+2020 Tesla Model 3 ANL/
+chevrolet/2020 Chevrolet Bolt/
+chevrolet/references/*.pdf
+
+# === Intermediate validation .mat files ===
+scripts/validation/BMS_US06_v26_g9.04_*.mat
+
 # === Simulink cache ===
 *.slxc
 slprj/
