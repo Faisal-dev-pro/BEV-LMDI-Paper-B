@@ -46,7 +46,7 @@ BEV_LMDI_Paper_B/
 │   │   ├── extended_datasets/      63 test files (62005005-62007009)
 │   │   ├── dc_fast_charging/       27 DCFC test files
 │   │   └── on_road_tests/          82 on-road test subdirectories
-│   ├── anl_bolt/               ANL data (2019 Chevrolet Bolt EV)
+│   ├── anl_bolt/               ANL data (2020 Chevrolet Bolt EV)
 │   │   ├── 15 TDMS files (61910017-61911008)
 │   │   └── Test summary PDF
 │   └── drive_cycles/           Drive cycle schedule files
@@ -59,14 +59,23 @@ BEV_LMDI_Paper_B/
 │   ├── tesla_g11.0/            Gear sweep g=11.0 results (4 .mat)
 │   └── extraction/             ANL CAN bus extraction CSVs
 │
-├── manuscript/                 Paper A submission files
-│   ├── Khan_Sutharssan_ECMX_2026_LMDI_BEV_Manuscript_v26.tex
-│   ├── Khan_Sutharssan_ECMX_2026.docx
-│   ├── Khan_Sutharssan_ECMX_2026_marked.docx
-│   ├── Khan_Sutharssan_ECMX_2026_v26.docx
-│   └── Highlights.docx
+├── manuscript/                 Paper B draft
+│   └── AE_Paper_B_Draft.md        Full draft (7661 words, 12 figs, 8 tables, 104 refs)
 │
-├── figures/                    Generated publication figures (empty)
+├── results/figures/            Generated publication figures
+│   ├── Fig1_powertrain_schematic.pdf
+│   ├── Fig2_drive_cycles.pdf
+│   ├── Fig3_boundary_methods.pdf
+│   ├── Fig4_validation_energy.pdf
+│   ├── Fig5_regime_shares.pdf
+│   ├── Fig6_boundary_sensitivity.pdf
+│   ├── Fig7_waterfall_UDDS_US06.pdf
+│   ├── Fig8_centrepiece.pdf
+│   ├── Fig9_sankey.pdf
+│   ├── Fig10_cross_vehicle.pdf
+│   ├── Fig11_cross_gear.pdf
+│   ├── Fig12_FW_vs_gear.pdf
+│   └── png/                       200 DPI PNG conversions
 │
 ├── references/                 Reference material
 │   ├── 3 Bolt motor characterisation PDFs
@@ -92,22 +101,28 @@ BEV_LMDI_Paper_B/
 
 ## Simulation matrix (Paper B core)
 
-20 runs: 4 configurations x 5 drive cycles.
+19 runs completed: 3 Tesla gear ratios x 5 cycles + 4 Bolt cycles. All validated within ±5% of ANL targets.
 
 | Config | UDDS | HWFET | US06 | WLTP | Artemis MW130 |
 |--------|------|-------|------|------|---------------|
-| Tesla g=7.0 | 105.3 | -- | 143.3 | 122.2 | pending |
-| Tesla g=9.04 | 110.6 | 122.3* | 148.7 | 126.6 | 154.0 |
-| Tesla g=11.0 | 110.6 | -- | 155.1 | 131.5 | -- |
-| Bolt EV g=7.05 | -- | -- | -- | -- | -- |
+| Tesla g=7.0 | 105.3 | 112.1 | 143.3 | 122.2 | 154.0 |
+| Tesla g=9.04 | 108.1 | 116.9 | 148.7 | 126.6 | 159.7 |
+| Tesla g=11.0 | 110.6 | 122.3 | 155.1 | 131.5 | 168.5 |
+| Bolt EV g=7.05 | 105.9 | 127.8 | 172.7 | 138.2 | -- |
 
-Values are BMS net Wh/km. *HWFET fails validation (+6.9%), deferred to split-authority driver.
+Values are BMS net Wh/km.
 
 ---
 
-## Key finding
+## Key findings
 
-UDDS g=11.0 = UDDS g=9.04 = 110.6 Wh/km. UDDS max speed (91 km/h) is below FW onset at both gear ratios (117.6 km/h at g=9.04, 96.7 km/h at g=11.0). Zero FW means zero structural energy penalty. This is the structural contrast anchor for Paper B. On US06, the same gear ratio change produces +6.4 Wh/km because 69.2% of distance is in field weakening.
+LMDI-I decomposition at the motor operating regime level separates energy consumption differences into structural (regime residence) and intensity (per-regime efficiency) effects.
+
+- **UDDS to US06 (Tesla g=9.04):** +53.1 Wh/km, 78% structural. The US06 introduces field-weakening operation absent on the UDDS.
+- **UDDS to HWFET (Tesla g=9.04):** +21.8 Wh/km, 0% structural. Both cycles stay in MTPA; the entire difference is intensity.
+- **Cross-vehicle (Tesla vs Bolt):** 88-99% structural on HWFET/US06/WLTP. The Bolt enters field weakening at 88.4 km/h vs Tesla 117.6 km/h.
+- **Gear ratio sweep (g=7.0 to 11.0):** Structural and intensity terms are large and partially offsetting on high-speed cycles. US06: +59.4 structural, -47.8 intensity, net +11.6 Wh/km.
+- **Boundary sensitivity:** The regime boundary method alters structural attribution by 82 percentage points for identical data.
 
 ---
 
@@ -164,4 +179,4 @@ run('scripts/gear_sweep/v26_run_US06_g7.m')
 
 ---
 
-*Last updated: 14 July 2026*
+*Last updated: 27 July 2026*

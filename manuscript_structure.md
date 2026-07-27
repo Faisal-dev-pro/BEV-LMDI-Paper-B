@@ -508,20 +508,22 @@ The allocation is flexible within the 6000-8000 envelope. If validation or resul
 
 ## 18a. Figure Map (12 figures)
 
-| Fig | Title | Section |
-|-----|-------|---------|
-| 1 | Powertrain schematic | 3.1 |
-| 2 | Drive cycle speed profiles with FW onset | 3.1 |
-| 3 | Torque-speed boundary methods (M1, M2, M3) | 3.3 |
-| 4 | Validation cumulative energy (Tesla + Bolt) | 4.1 |
-| 5 | Regime share stacked bars (4 configs x 5 cycles) | 5.1 |
-| 6 | Boundary sensitivity bars (82 pp spread) | 5.1 |
-| 7 | LMDI waterfall UDDS to US06 | 5.1 |
-| 8 | Centrepiece: operating map + dual waterfall | 5.1 |
-| 9 | Sankey energy flow (UDDS vs US06) | 5.1 |
-| 10 | Cross-vehicle structural/intensity bars | 5.2 |
-| 11 | Cross-gear LMDI decomposition bars | 5.3 |
-| 12 | FW distance share vs gear ratio | 5.3 |
+All figures numbered to match manuscript order. PDF and PNG files in `results/figures/`.
+
+| Fig | Filename | Title | Section |
+|-----|----------|-------|---------|
+| 1 | Fig1_powertrain_schematic | Powertrain schematic | 3.1 |
+| 2 | Fig2_drive_cycles | Drive cycle speed profiles with FW onset | 3.1 |
+| 3 | Fig3_boundary_methods | Torque-speed boundary methods (M1, M2, M3) | 3.3 |
+| 4 | Fig4_validation_energy | Validation cumulative energy (Tesla + Bolt) | 4.1 |
+| 5 | Fig5_regime_shares | Regime share stacked bars (4 configs x 5 cycles) | 5.1 |
+| 6 | Fig6_boundary_sensitivity | Boundary sensitivity bars (82 pp spread) | 5.1 |
+| 7 | Fig7_waterfall_UDDS_US06 | LMDI waterfall UDDS to US06 | 5.1 |
+| 8 | Fig8_centrepiece | Centrepiece: operating map + dual waterfall | 5.1 |
+| 9 | Fig9_sankey | Sankey energy flow (UDDS vs US06) | 5.1 |
+| 10 | Fig10_cross_vehicle | Cross-vehicle structural/intensity bars | 5.2 |
+| 11 | Fig11_cross_gear | Cross-gear LMDI decomposition bars | 5.3 |
+| 12 | Fig12_FW_vs_gear | FW distance share vs gear ratio | 5.3 |
 
 ---
 
