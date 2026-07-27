@@ -1,22 +1,22 @@
-# Decomposition of battery electric vehicle energy consumption by operating regime: LMDI analysis validated on two production vehicles across five drive cycles
+# Decomposition of battery electric vehicle energy consumption by operating regime: LMDI analysis validated on two production vehicles across four drive cycles
 
-**Authors:** Faisal Shah Khan, Tharangini Sutharssan
+Faisal Shah Khan ^a,*, Thamo Sutharssan ^a
 
-**Affiliation:** University of East London, London, United Kingdom
+^a School of Architecture, Computing and Engineering, University of East London, University Way, London E16 2RD, United Kingdom
 
-**Target journal:** Applied Energy (Elsevier)
+\* Corresponding author. Email: u2796240@uel.ac.uk
 
-**Status:** Draft, July 2026
+Email addresses: u2796240@uel.ac.uk, faisalshah.khan@yahoo.com (F.S. Khan), T.Sutharssan@uel.ac.uk (T. Sutharssan).
 
 ---
 
 ## Highlights
 
-1. LMDI decomposition is implemented within the BEV powertrain for the first time.
+1. LMDI decomposition is implemented within the BEV powertrain.
 2. Two production vehicles validated within 5% across four drive cycles.
-3. Structural effects explain 78% of the energy gap between UDDS and US06 drive cycles.
-4. Regime boundary method alters energy attribution by 57 percentage points.
-5. Motor design, not gear ratio, determines energy exposure in high-speed regimes.
+3. Structural effects explain 78% of the UDDS to US06 energy gap (B3, 370 V).
+4. Regime boundary method alters energy attribution by 82 percentage points.
+5. For two IPM vehicles, motor parameters dominate gear ratio in regime exposure.
 
 ---
 
@@ -26,15 +26,51 @@ LMDI, index decomposition analysis, battery electric vehicle, energy consumption
 
 ---
 
+## Nomenclature
+
+| Symbol | Definition |
+|---|---|
+| A, B, C | road load coefficients (N, N s/m, N s^2/m^2) |
+| CdA | aerodynamic drag area (m^2) |
+| d | distance (km) |
+| e | per-regime energy contribution, S · I (Wh/km) |
+| E | regime energy (Wh) |
+| g | gear ratio |
+| I | intensity factor, E/d (Wh/km) |
+| i_d, i_q | d- and q-axis stator current (A) |
+| k_Vmax | voltage modulation index |
+| L(x, y) | logarithmic mean, (x - y) / (ln x - ln y) |
+| L_d, L_q | d- and q-axis inductance (H) |
+| m_test | test mass (kg) |
+| p | pole pairs |
+| P_aux | auxiliary power (W) |
+| r | regime index |
+| R_s | stator resistance (Ohm) |
+| r_w | wheel radius (m) |
+| S | structural factor (distance share) |
+| T | motor torque (N m) |
+| v | vehicle speed (km/h) |
+| V_dc | DC bus voltage (V) |
+| v_FW | field-weakening onset speed (km/h) |
+| W_wheel | positive wheel energy (Wh) |
+| Delta_str | structural term of LMDI decomposition (Wh/km) |
+| Delta_int | intensity term of LMDI decomposition (Wh/km) |
+| omega | motor angular speed (rad/s) |
+| psi_m | permanent magnet flux linkage (Wb) |
+
+**Abbreviations:** BEV, battery electric vehicle; CRG, current reference generator; FW, field weakening; IPM, interior permanent magnet; LMDI, logarithmic mean Divisia index; MTPA, maximum torque per ampere; B1/B2/B3, boundary methods 1/2/3.
+
+---
+
 ## Abstract
 
-The discrepancy between regulatory and actual battery electric vehicle energy consumption can exceed 30%, yet remains poorly understood at the component level. Vehicle-level Wh/km does not distinguish the physical mechanisms that control energy distribution over the motor's operating regimes.
+Regulatory and real-world battery electric vehicle energy consumption can differ by more than 30%. Vehicle-level Wh/km does not identify the mechanisms governing energy distribution across motor operating regimes.
 
-This study applies logarithmic mean Divisia index (LMDI-I) decomposition, established at the sectoral level for attributing changes in energy use, within the powertrain for the first time. Drive cycle energy is separated into structural effects (regime residence) and intensity effects (per-regime efficiency). Five regime boundary methods with increasing physical realism are compared. Two production vehicles, the Tesla Model 3 and the Chevrolet Bolt EV, are validated to within 5% of publicly available dynamometer data across four drive cycles. The decomposition is then applied to five cycles, including a real-world motorway profile.
+This study applies logarithmic mean Divisia index (LMDI-I) decomposition within the powertrain to separate drive cycle energy into structural effects (regime residence) and intensity effects (per-regime efficiency). Three regime boundary methods of increasing physical realism are compared, with the most detailed evaluated at three DC bus voltages. Two production vehicles, the Tesla Model 3 and Chevrolet Bolt EV, are validated within 5% of publicly available dynamometer data across four drive cycles and the decomposition is applied to five cycles, including a real-world motorway profile.
 
-Structural effects explain 78% of the 53.1 Wh/km difference between the UDDS urban cycle and the US06 aggressive cycle for the Tesla Model 3. Cross-vehicle comparisons indicate that 88 to 99% of the motor-level energy difference is attributable to structural effects across three of four matched cycles. The choice of regime boundary alters attribution by up to 57 percentage points. The Bolt EV enters extended-speed operation at 88 km/h, compared with 118 km/h for the Tesla Model 3, despite possessing a lower gear ratio. Motor design parameters, rather than transmission ratio, primarily determine regime exposure.
+Structural effects explain 78% of the 53.1 Wh/km difference between the Urban Dynamometer Driving Schedule (UDDS) and US06 cycles for the Tesla Model 3 under the current reference generator (CRG) derived boundary at 370 V. Under different voltage assumptions, this proportion ranges from 42% to 103%. Cross-vehicle comparisons attribute 88-99% of the motor-level energy difference to structural effects on three of four matched cycles. Boundary selection alters attribution by up to 82 percentage points. The Bolt EV enters field weakening at 88 km/h versus 118 km/h for the Tesla, despite a lower gear ratio. Motor design parameters, rather than gear ratio, are the primary determinant of regime exposure.
 
-These findings offer a quantitative diagnostic that links drive-cycle definition, motor design, and transmission gearing to energy consumption in battery electric vehicles.
+These findings offer a quantitative diagnostic linking drive-cycle definition, motor design, and transmission gearing to energy consumption in battery electric vehicles.
 
 ---
 
@@ -49,8 +85,8 @@ Index decomposition analysis, particularly the logarithmic mean Divisia index (L
 This research addresses existing limitations by applying LMDI-I decomposition to the battery electric vehicle powertrain for the first time. The primary contributions are outlined below:
 
 1. LMDI-I decomposition is applied at the motor level to partition drive cycle energy consumption into structural effects, which quantify the proportion of distance covered in each operating regime, and intensity effects, which measure energy consumption per unit distance within each regime. Two production vehicles with distinct motor designs, the Tesla Model 3 and Chevrolet Bolt EV, are validated to within 5% accuracy using publicly available dynamometer data across four drive cycles (UDDS, HWFET, US06, WLTP). The analysis is further extended to a fifth cycle, the Artemis Motorway 130, to investigate sustained field-weakening operation beyond the validated range.
-2. Five regime boundary methods, each offering progressively greater physical realism, are compared. These range from a simplified back-electromotive force voltage limit to boundaries derived from the motor's exact torque-speed operating trajectory. The choice of boundary definition alters energy attribution by as much as 57 percentage points for identical simulation data, demonstrating that regime delineation is a significant factor in energy accounting.
-3. Cross-vehicle LMDI comparisons are performed using matched drive cycles. Structural effects explain 88-99% of the motor-level energy difference between the two vehicles across three of four evaluated cycles. The Bolt EV transitions to extended-speed operation at 88 km/h, whereas the Tesla Model 3 does so at 118 km/h. This difference occurs despite the Bolt EV's lower gear ratio, indicating that motor design parameters, rather than transmission ratio, govern regime exposure.
+2. Three regime boundary methods, each offering progressively greater physical realism, are compared. These range from a simplified back-electromotive force voltage limit to a boundary derived from the motor's exact torque-speed operating trajectory. The most detailed method is further evaluated at three DC bus voltages, yielding five boundary definitions in total. The choice of boundary definition alters energy attribution by as much as 82 percentage points for identical simulation data, demonstrating that regime delineation is a significant factor in energy accounting.
+3. Cross-vehicle LMDI comparisons are performed using matched drive cycles. Structural effects explain 88-99% of the motor-level energy difference between the two vehicles across three of four evaluated cycles. The Bolt EV transitions to extended-speed operation at 88 km/h, whereas the Tesla Model 3 does so at 118 km/h. This difference occurs despite the Bolt EV's lower gear ratio, indicating that, for the two IPM machines evaluated, motor design parameters rather than transmission ratio govern regime exposure.
 
 The structure of the paper is as follows. Section 2 reviews previous research on LMDI decomposition in transport and energy applications, as well as studies on battery electric vehicle energy consumption modelling. Section 3 details the methodology, including vehicle models, the LMDI-I decomposition framework, and regime boundary methods. Section 4 presents validation results for both vehicles across four drive cycles. Section 5 provides the LMDI decomposition results, including cross-cycle analysis, cross-vehicle comparisons, and implications for gear ratio design. Section 6 examines the implications for vehicle design and drive cycle assessment. Section 7 concludes the paper.
 
@@ -102,6 +138,7 @@ Five drive cycles are evaluated, covering a spectrum from urban to aggressive mo
 | Gear ratio | 9.04 | 7.05 |
 | Wheel radius r_w (m) | 0.326 | 0.317 |
 | Test mass m_test (kg) | 1928 | 1705 |
+| Aerodynamic drag area CdA (m^2) | 0.51 | 0.71 |
 | Road load A (N) | 162.0 | 126.3 |
 | Road load B (N s/m) | 0.552 | 2.008 |
 | Road load C (N s^2/m^2) | 0.315 | 0.434 |
@@ -111,7 +148,7 @@ Five drive cycles are evaluated, covering a spectrum from urban to aggressive mo
 | Coast regen deceleration (g) | 0.15 | 0.04 |
 | FW onset speed v_FW (km/h) | 117.6 | 88.4 |
 
-(a) Estimated from published finite element data; not used in the Simscape simulation loop. (b) Measured traction-average DC bus voltage from Argonne data; nominal battery voltage 400 V. (c) Measured cable drop 1.7 mOhm; set to zero in simulation.
+(a) Estimated from published finite element data; not used in the Simscape simulation loop but used for the B3 field-weakening boundary calculation (Section 3.3). (b) Measured traction-average DC bus voltage from Argonne data; nominal battery voltage 400 V. (c) Measured cable drop 1.7 mOhm; set to zero in simulation.
 
 ### 3.2 LMDI-I decomposition framework
 
@@ -135,23 +172,25 @@ If a regime exists in one state but is absent in the other, the standard logarit
 
 This framework is implemented in two configurations. In the cross-cycle comparison, states A and B correspond to different drive cycles evaluated on the same vehicle at the same gear ratio. The structural term quantifies the extent to which the Wh/km difference between cycles arises from the varying proportions of distance spent in each regime. In the cross-vehicle comparison, states A and B represent two vehicles evaluated on the same drive cycle. Here, the structural term quantifies the portion of the energy difference attributable to differing regime exposure, while the intensity term reflects differences in per-regime motor efficiency. Both configurations utilise Eqs. (2)–(4) without modification.
 
+LMDI-I is chosen over other decomposition methods because it produces an exact result with zero residual and symmetric treatment of the two comparison states [1, 2]. Laspeyres and Paasche indices use fixed base-period or current-period weights, producing different results depending on the direction of comparison and leaving an interaction term when the total change is allocated across factors. Shapley value decomposition also removes the residual but requires averaging over all possible orderings of factor changes rather than providing a closed-form weight. In the two-factor case considered here, both LMDI and Shapley yield unique decompositions. LMDI is preferred for its closed-form logarithmic mean weight and its established application in energy decomposition analysis [1-3].
+
 ### 3.3 CRG-derived field-weakening boundary
 
-The LMDI decomposition described in Section 3.2 requires classification of each solver timestep into one of three motor operating regimes. Below the field-weakening onset speed, the motor operates in the maximum torque per ampere (MTPA) regime. At and above the onset speed, the motor transitions into the field-weakening regime. A transition band, defined as the 5% speed interval immediately below the onset speed, represents the region where the current reference begins to deviate from the MTPA trajectory. This three-regime partition establishes the structural categories for the decomposition.
+The LMDI decomposition described in Section 3.2 requires classification of each solver timestep into one of three motor operating regimes. Below the field-weakening onset speed, the motor operates in the maximum torque per ampere (MTPA) regime. At and above the onset speed, the motor transitions into the field-weakening regime. A transition band, defined as the 5% speed interval immediately below the onset speed, represents the region where the current reference begins to deviate from the MTPA trajectory. This three-regime partition establishes the structural categories for the decomposition. The 5% bandwidth captures the operating region where the CRG current vector begins departing from the MTPA trajectory. Varying this parameter from 2.5% to 10% redistributes distance between the transition and MTPA regimes but does not affect the field-weakening share, which is determined by the onset boundary alone. The maximum transition share across all configurations is 12.5% (Tesla US06, Table 3). Compared with the 82 percentage point range produced by the boundary method comparison (Section 5.1), the transition bandwidth is a second-order parameter.
 
 The onset speed for field weakening is not a fixed value but varies with torque demand. At low torque, the MTPA current vector is small, resulting in the voltage constraint being reached at a higher motor speed. Conversely, at high torque, the increased current produces greater flux linkage, causing the voltage limit to be reached at a lower speed. Consequently, the field-weakening boundary forms a curve in the torque-speed plane. The definition of this boundary determines how distance and energy are attributed to each regime, making it a critical energy accounting decision with direct implications for the decomposition.
 
-Three boundary methods, each offering increasing physical realism, are compared. The first method (M1) defines the onset speed as omega_e = V_dc / (sqrt(3) * psi_m), representing the speed at which the back-electromotive force equals the DC bus voltage under no-load conditions. This boundary remains constant across all torque levels and does not account for saliency or load current. The second method (M2) solves the d-q voltage equation at i_d = 0, with i_q determined by the torque demand. This boundary varies with torque but does not align with the MTPA trajectory, as the assumption i_d = 0 neglects the reluctance torque contribution that shifts the optimal current vector into the negative i_d direction. The third method (M3) determines the onset speed using the motor's current reference generator, which provides the precise MTPA operating point, including saliency and reluctance torque. For the Tesla motor, the onset is identified from a lookup table using a d-axis current departure threshold of 10 A at V_dc = 370 V. For the Bolt motor, an analytically equivalent approach is applied: at each torque level, the MTPA current vector is calculated, and the speed at which the resulting terminal voltage reaches V_dc * k_Vmax / sqrt(3) defines the onset. Both implementations yield a torque-dependent boundary curve that accurately reflects the operating trajectory.
+Three boundary methods, each offering increasing physical realism, are compared. The first method (B1) defines the onset speed as omega_e = V_dc / (sqrt(3) * psi_m), representing the speed at which the back-electromotive force equals the DC bus voltage under no-load conditions. This boundary remains constant across all torque levels and does not account for saliency or load current. The second method (B2) solves the d-q voltage equation at i_d = 0, with i_q determined by the torque demand. This boundary varies with torque but does not align with the MTPA trajectory, as the assumption i_d = 0 neglects the reluctance torque contribution that shifts the optimal current vector into the negative i_d direction. The third method (B3) determines the onset speed using the motor's current reference generator, which provides the precise MTPA operating point, including saliency and reluctance torque. For the Tesla motor, the onset is identified from a lookup table using a d-axis current departure threshold of 10 A at V_dc = 370 V. For the Bolt motor, an analytically equivalent approach is applied: at each torque level, the MTPA current vector is calculated, and the speed at which the resulting terminal voltage reaches V_dc * k_Vmax / sqrt(3) defines the onset. Both implementations yield a torque-dependent boundary curve that accurately reflects the operating trajectory.
 
-To evaluate the sensitivity of the decomposition to the voltage assumption, M3 is assessed at three DC bus voltages: 350 V, 370 V, and 400 V. The baseline value of 370 V corresponds to the average measured DC bus voltage during traction, as recorded in the Argonne dynamometer data. These five boundary definitions (M1, M2, and M3 at three voltages) are applied to identical simulation data. The net energy intensity for each cycle remains unchanged across all five definitions, indicating that the boundary alters regime classification without affecting the underlying physics. The sensitivity of the LMDI attribution to boundary selection is further quantified in Section 5.
+To evaluate the sensitivity of the decomposition to the voltage assumption, B3 is assessed at three DC bus voltages: 350 V, 370 V, and 400 V. The baseline value of 370 V corresponds to the average measured DC bus voltage during traction, as recorded in the Argonne dynamometer data. These five boundary definitions (B1, B2, and B3 at three voltages) are applied to identical simulation data. The net energy intensity for each cycle remains unchanged across all five definitions, indicating that the boundary alters regime classification without affecting the underlying physics. The sensitivity of the LMDI attribution to boundary selection is further quantified in Section 5.
 
-Regenerative braking timesteps are classified using the same speed-based criterion as traction timesteps, with torque magnitude estimated from battery power and motor speed. This approach ensures that high-speed regeneration is attributed to the field-weakening regime, thereby maintaining consistent net energy intensity across all three regimes.
+Regenerative braking timesteps are classified using the same speed-based criterion as traction timesteps. Torque magnitude is estimated from motor electrical power and motor speed, applying a fixed drivetrain efficiency of 0.90. Since the decomposition is performed at the motor level (Section 3.1), auxiliary loads and cable losses are excluded from the torque estimate. The use of a fixed efficiency introduces a bounded bias: a ±5% deviation from the assumed value results in a ±5% shift in the torque estimate, which alters the torque-dependent onset speed by less than 2% at typical regenerative operating points. This displacement remains within the 5% transition band. High-speed regeneration is therefore attributed to the field-weakening regime, maintaining consistent net energy intensity across all three regimes.
 
-![Figure 3: Torque-speed diagram showing the three boundary methods (M1, M2, M3) and the resulting regime classification for the Tesla motor](../results/figures/png/Fig3_boundary_methods.png)
+![Figure 3: Torque-speed diagram showing the three boundary methods (B1, B2, B3) and the resulting regime classification for the Tesla motor](../results/figures/png/Fig3_boundary_methods.png)
 
 ## 4. Validation results
 
-Table 2 summarises battery-level validation results for both vehicles across four drive cycles. Simulated net Wh/km is compared to measured Argonne dynamometer targets at the battery terminals. The acceptance criterion is ±5% of the measured value. All eight cycle-vehicle combinations meet this criterion.
+Table 2 summarises battery-level validation results for both vehicles across the four drive cycles with Argonne dynamometer targets. The Tesla Artemis Motorway 130 is included without a validation target. Simulated net Wh/km is compared to measured values at the battery terminals. The acceptance criterion is ±5% of the measured value. All eight validated cycle-vehicle combinations meet this criterion.
 
 ### 4.1 Tesla Model 3
 
@@ -167,11 +206,11 @@ The Artemis Motorway 130 cycle does not have a corresponding Argonne dynamometer
 
 ### 4.2 Chevrolet Bolt EV
 
-The WLTP cycle yields 138.2 Wh/km against a measured 136.3 Wh/km (+1.4%). The HWFET yields 127.8 Wh/km against 125.2 Wh/km (+2.1%). The US06 yields 172.7 Wh/km against 167.8 Wh/km (+2.9%). The UDDS yields 105.9 Wh/km, compared with 101.9 Wh/km (+3.9%). The maximum error within the four cycles is 3.9%.
+The WLTP cycle yields 138.2 Wh/km against a measured 136.3 Wh/km (+1.4%). The HWFET yields 127.8 Wh/km against 125.2 Wh/km (+2.1%). The US06 yields 172.7 Wh/km against 167.8 Wh/km (+2.9%). The UDDS yields 105.9 Wh/km, compared with 101.9 Wh/km (+3.9%). The maximum error within the four cycles is 3.9%. Regenerative braking fractions are available for three cycles. The simulated fractions are 31.7% versus 34.6% measured for the UDDS, 23.3% versus 23.9% for the US06, and 20.9% versus 23.3% for the WLTP. All three are within the acceptance band.
 
 The Artemis Motorway 130 cycle is not available in the Argonne database for the Bolt EV. Section 5 uses the four validated cycles common to both vehicles for cross-vehicle comparisons.
 
-**Table 2.** Battery-level validation results. Measured targets from the Argonne National Laboratory dynamometer database. Acceptance criterion: net Wh/km within 5% of the measured value. Regenerative braking fractions reported for the Tesla Model 3 only.
+**Table 2.** Battery-level validation results. Measured targets from the Argonne National Laboratory dynamometer database. Acceptance criterion: net Wh/km within 5% of the measured value. No measured regen target is available for the Bolt HWFET.
 
 | Vehicle | Cycle | Measured net (Wh/km) | Simulated net (Wh/km) | Error (%) | Regen measured (%) | Regen simulated (%) |
 |---|---|---|---|---|---|---|
@@ -180,12 +219,24 @@ The Artemis Motorway 130 cycle is not available in the Argonne database for the 
 | Tesla | WLTP | 125.6 | 126.6 | +0.8 | 26.9 | 24.1 |
 | Tesla | US06 | 150.6 | 148.7 | -1.2 | 29.9 | 29.4 |
 | Tesla | Artemis MW130 | -- | 159.7 | -- | -- | -- |
-| Bolt | UDDS | 101.9 | 105.9 | +3.9 | -- | -- |
-| Bolt | HWFET | 125.2 | 127.8 | +2.1 | -- | -- |
-| Bolt | US06 | 167.8 | 172.7 | +2.9 | -- | -- |
-| Bolt | WLTP | 136.3 | 138.2 | +1.4 | -- | -- |
+| Bolt | UDDS | 101.9 | 105.9 | +3.9 | 34.6 | 31.7 |
+| Bolt | HWFET | 125.2 | 127.8 | +2.1 | -- | 7.9 |
+| Bolt | US06 | 167.8 | 172.7 | +2.9 | 23.9 | 23.3 |
+| Bolt | WLTP | 136.3 | 138.2 | +1.4 | 23.3 | 20.9 |
 
 Tesla root-mean-square error across four cycles: 1.4%. Bolt maximum error: 3.9%. The Artemis Motorway 130 has no corresponding Argonne dynamometer test for either vehicle.
+
+### 4.3 Motor-level validation
+
+The battery-level validation in Sections 4.1 and 4.2 confirms that aggregate Wh/km remains within 5% of the ANL dynamometer target. The LMDI decomposition, however, partitions energy at the motor level. This subsection verifies that agreement at the battery terminal translates to fidelity at the motor level.
+
+The ANL test facility measures Tesla motor electrical power independently of the BMS using calibrated Hioki power analysers on the rear inverter AC lines (channel WP4). Three US06 tests (62005016, 62006001, 62006005) report motor-level net energy consumption of 144.9, 142.1, and 138.5 Wh/km (mean 141.8, SD = 2.6). The simulated value is 139.1 Wh/km, resulting in an error of -1.9%. Gross traction energy is 205.9 Wh/km measured and 202.8 Wh/km simulated (-1.5%). The measured regenerative braking fraction (31.1%) matches the simulated value (31.4%) within 0.3 percentage points. Auxiliary power, calculated from the difference between BMS and motor Hioki measurements, is 654 W, which aligns with the model value of 690 W.
+
+The structural term is determined by distance shares above the field-weakening onset. Since the ANL CAN bus does not report regenerative braking torque for the Tesla Model 3, the torque-dependent CRG boundary cannot be applied to measured data at each timestep. Instead, a fixed speed threshold corresponding to the CRG onset at zero torque (117.6 km/h) is applied to both measured and simulated speed traces. Using this consistent approach, measured and simulated distance shares agree within 0.2 percentage points.
+
+The Bolt ANL packages do not include Hioki power analysers on the motor inverter lines. Instead, Hioki instruments are installed at the battery (WP1), DC-DC converter (WP2), AC compressor (WP5), coolant heater (WP6), and battery heater (WP7). Motor-level power is inferred by subtracting Hioki-measured auxiliary loads from the Hioki battery power. This indirect measurement includes inverter switching losses; cable losses between the battery and the DC bus are not subtracted, but they are minimal. Three US06 tests (62009003, 62009019, 62009021) yield indirect motor-level net consumption of 167.6, 165.9, and 164.9 Wh/km (mean 166.1, SD = 1.4). The simulated value is 170.7 Wh/km, resulting in an error of +2.8%.
+
+Independent validation of per-regime energy intensities is not feasible for either vehicle. For the Tesla, the CAN bus does not report regenerative braking torque, which prevents regime classification at each timestep during deceleration. For the Bolt, the indirect measurement does not resolve instantaneous motor power for per-regime binning. Agreement in total motor energy to within 1.9% for the Tesla and 2.8% for the Bolt constrains the per-regime intensity errors, as deviations in one regime must be offset by differences in another.
 
 ## 5. LMDI decomposition results
 
@@ -193,17 +244,17 @@ Tesla root-mean-square error across four cycles: 1.4%. Bolt maximum error: 3.9%.
 
 Table 3 and Figure 5 report the motor-level regime shares for both vehicles across the evaluated drive cycles. For the Tesla Model 3 at g = 9.04, both the UDDS and HWFET cycles operate exclusively in the MTPA regime. The WLTP allocates 21.4% of its distance to field weakening, primarily within the Extra High sub-phase. The US06 assigns 36.3% to field weakening and 12.5% to the transition band. The Artemis Motorway 130 exhibits the highest field-weakening share at 70.3%, reflecting its sustained high-speed cruise characteristics.
 
-For the Bolt EV, all evaluated cycles enter the field-weakening regime. The UDDS allocates 20.3% of its distance to field weakening, despite a maximum speed of 91.2 km/h, due to the Bolt's field-weakening onset at 88.4 km/h. The HWFET and US06 allocate 82.3% and 89.5% of their distances, respectively, to field weakening. This consistent field-weakening exposure contrasts with the Tesla, where the UDDS and HWFET cycles remain entirely within the MTPA regime.
+For the Bolt EV, all evaluated cycles enter the field-weakening regime. The UDDS allocates 20.3% of its distance to field weakening, despite a maximum speed of 91.2 km/h, due to the Bolt's field-weakening onset at 88.4 km/h (Figure 2). Because distance accumulates in proportion to speed, intervals spent above the onset speed contribute disproportionately to the distance share. The transition share is 0.0% because the Bolt enters field weakening during high-torque acceleration transients at which the torque-dependent onset speed falls below the vehicle speed. The vehicle traverses the narrow transition band rapidly, producing a distance share below the 1% folding threshold (Section 3.2). The HWFET and US06 allocate 82.3% and 89.5% of their distances, respectively, to field weakening. This consistent field-weakening exposure contrasts with the Tesla, where the UDDS and HWFET cycles remain entirely within the MTPA regime.
 
 Table 4 presents the cross-cycle LMDI decomposition for the Tesla at g = 9.04. The UDDS to US06 comparison yields a total difference of +53.1 Wh/km, with +41.2 Wh/km (78%) attributed to structural effects and +11.9 Wh/km (22%) to intensity. The structural term is dominant because the US06 introduces 36.3% field-weakening distance, which is absent in the UDDS. The comparison between UDDS and Artemis cycles results in an increase of 66.0 Wh/km, with 80% of this difference attributed to structural effects. This outcome reflects the greater proportion of field-weakening operation in the Artemis cycle. The Artemis cycle has not been validated against dynamometer data (Section 4); therefore, this finding represents a model prediction that extrapolates the structural trend observed in the four validated cycles.
 
-The UDDS to HWFET comparison provides a diagnostic contrast. The total difference is +21.8 Wh/km, with zero structural contribution. Since both cycles operate exclusively in the MTPA regime at g = 9.04, the entire energy difference is attributed to intensity. The motor consumes more energy per kilometre at HWFET cruise speeds than at UDDS urban speeds, despite operating within the same regime. Figure 8 juxtaposes these contrasting decompositions: the per-timestep operating points on the torque-speed plane are shown alongside waterfall diagrams for the UDDS to US06 pair (78% structural) and the UDDS to HWFET pair (0% structural). Figure 9 presents the regime-tagged energy flow for both cycles as Sankey diagrams [90], in which stream widths are proportional to Wh/km and the regime split at the motor stage is visible.
+The UDDS to HWFET comparison provides a diagnostic contrast. The total difference is +21.8 Wh/km, with zero structural contribution. Since both cycles operate exclusively in the MTPA regime at g = 9.04, the entire energy difference is attributed to intensity. The motor consumes more energy per kilometre at HWFET cruise speeds than at UDDS urban speeds, despite operating within the same regime. Figure 8 juxtaposes these contrasting decompositions: the per-timestep operating points on the torque-speed plane are shown alongside waterfall diagrams for the UDDS to US06 pair (78% structural) and the UDDS to HWFET pair (0% structural). Figure 9 presents the regime-tagged energy flow for both cycles as Sankey diagrams [85], in which stream widths are proportional to Wh/km and the regime split at the motor stage is visible.
 
 For the Bolt EV, the UDDS to US06 comparison yields +69.7 Wh/km, with 54.9% attributed to structural effects. This lower structural share, compared to the Tesla (78%), occurs because the Bolt already operates in field weakening on the UDDS (20.3% field-weakening distance). The structural contrast between cycles is reduced when both cycles include field-weakening operation.
 
-The sensitivity of the decomposition to regime boundary definitions is assessed [85–88] by applying five boundary methods (Section 3.3) to the same Tesla g = 9.04 simulation data. Table 5 and Figure 6 report the UDDS to US06 structural share for each method. Under M1 (back-EMF limit), the structural share is 21%. Under M3 at 370 V (the baseline), it is 78%, resulting in a 57 percentage point difference. Under M3 at 350 V, the structural share exceeds 100%, indicating a slightly negative intensity contribution. A wider field-weakening band at lower voltage reduces per-regime intensity. Net energy intensity remains constant across all five methods, confirming that boundary changes affect regime classification but do not alter total energy consumption. The choice of boundary method determines whether the UDDS to US06 difference is attributed to structure or intensity.
+The sensitivity of the decomposition to regime boundary definitions is assessed [84] by applying five boundary definitions (Section 3.3) to the same Tesla g = 9.04 simulation data. Table 5 and Figure 6 report the UDDS to US06 structural share for each method. Under B1 (back-EMF limit), the structural share is 21%. Under B3 at 370 V (the baseline), it is 78%. Under B3 at 350 V, the structural share exceeds 100%, indicating a slightly negative intensity contribution, as a wider field-weakening band at lower voltage reduces per-regime intensity. The full span across all five methods is 82 percentage points. Net energy intensity remains constant across all five methods, confirming that boundary changes affect regime classification but do not alter total energy consumption. The choice of boundary method determines whether the UDDS to US06 difference is attributed to structure or intensity.
 
-**Table 3.** Motor-level regime distance shares and net energy intensity. Tesla at g = 9.04; Bolt at g = 7.05. Transition band defined as the 5% speed interval below the CRG field-weakening onset.
+**Table 3.** Motor-level regime distance shares and net energy intensity. Tesla at g = 9.04; Bolt at g = 7.05. Transition band defined as the 5% speed interval below the CRG field-weakening onset. Transition shares below 1% are folded into the MTPA regime prior to decomposition (Section 3.2); this applies to the Bolt EV on the UDDS.
 
 | Vehicle | Cycle | Net Wh/km | S_MTPA (%) | S_Trans (%) | S_FW (%) |
 |---|---|---|---|---|---|
@@ -234,17 +285,17 @@ The sensitivity of the decomposition to regime boundary definitions is assessed 
 
 All residuals below 4 x 10^-14 Wh/km. The UDDS to HWFET pair for the Tesla yields zero structural contribution because both cycles operate entirely within the MTPA regime at g = 9.04.
 
-**Table 5.** Sensitivity of the UDDS to US06 decomposition to regime boundary definition. All five methods are applied to the same Tesla g = 9.04 simulation data. The total energy difference (Delta = +53.1 Wh/km) is identical across all methods; only the structural-intensity partition changes.
+**Table 5.** Sensitivity of the UDDS to US06 decomposition to regime boundary definition. All five definitions are applied to the same Tesla g = 9.04 simulation data. The total energy difference (Delta = +53.1 Wh/km) is identical across all methods; only the structural-intensity partition changes.
 
 | Method | Voltage (V) | US06 S_FW (%) | Structural (Wh/km) | Intensity (Wh/km) | S share (%) |
 |---|---|---|---|---|---|
-| M1 (back-EMF) | 370 | 6.4 | +11.1 | +42.0 | 20.9 |
-| M2 (voltage at i_d = 0) | 370 | 13.4 | +37.8 | +15.2 | 71.3 |
-| M3 (CRG) | 350 | 51.5 | +54.4 | -1.3 | 102.5 |
-| M3 (CRG) | 370 | 36.3 | +41.2 | +11.9 | 77.6 |
-| M3 (CRG) | 400 | 11.5 | +22.4 | +30.7 | 42.2 |
+| B1 (back-EMF) | 370 | 6.4 | +11.1 | +42.0 | 20.9 |
+| B2 (voltage at i_d = 0) | 370 | 13.4 | +37.8 | +15.2 | 71.3 |
+| B3 (CRG) | 350 | 51.5 | +54.4 | -1.3 | 102.5 |
+| B3 (CRG) | 370 | 36.3 | +41.2 | +11.9 | 77.6 |
+| B3 (CRG) | 400 | 11.5 | +22.4 | +30.7 | 42.2 |
 
-The structural share ranges from 20.9% (M1) to 102.5% (M3 at 350 V), a span of 82 percentage points. An S share exceeding 100% indicates a negative intensity contribution: a wider field-weakening band reduces per-regime intensity, offsetting the structural cost.
+The structural share ranges from 20.9% (B1) to 102.5% (B3 at 350 V), a span of 82 percentage points. An S share exceeding 100% indicates a negative intensity contribution: a wider field-weakening band reduces per-regime intensity, offsetting the structural cost.
 
 ![Figure 6: Structural share of the UDDS to US06 energy difference under five boundary definitions, showing an 82 percentage point spread](../results/figures/png/Fig6_boundary_sensitivity.png)
 
@@ -262,7 +313,9 @@ On the HWFET, the Bolt consumes 18.0 Wh/km more than the Tesla, with 99.1% of th
 
 The UDDS provides a contrasting result. The Bolt consumes 15.0 Wh/km more than the Tesla, but the structural share drops to 57.2%. The Bolt enters field weakening on the UDDS because its onset speed (88.4 km/h) falls below the cycle maximum (91.2 km/h). The Tesla, with an onset speed of 117.6 km/h, remains in MTPA. The smaller structural share on the UDDS results because the Bolt's field-weakening exposure is limited to a narrow speed band near the cycle peak, producing a modest structural contrast alongside a non-negligible intensity difference.
 
-The Bolt features a lower gear ratio (7.05 versus 9.04), which would typically reduce motor speed and decrease field-weakening operation if all other parameters were identical. The Bolt's permanent magnet flux linkage (0.1017 Wb), DC bus voltage (350 V), and modulation index (0.904) produce a lower field-weakening onset speed compared to the Tesla's parameters (0.0772 Wb, 370 V, 1.10). Motor design, rather than gear ratio, governs regime exposure.
+The Bolt features a lower gear ratio (7.05 versus 9.04), which would typically reduce motor speed and decrease field-weakening operation if all other parameters were identical. The Bolt's permanent magnet flux linkage (0.1017 Wb), DC bus voltage (350 V), and modulation index (0.904) produce a lower field-weakening onset speed compared to the Tesla's parameters (0.0772 Wb, 370 V, 1.10). Motor design parameters, rather than gear ratio, are the primary determinant of regime exposure for the two IPM machines evaluated.
+
+The two vehicles differ in motor design, gear ratio, mass (1705 versus 1928 kg), aerodynamic drag area (CdA = 0.71 versus 0.51 m^2), and regenerative braking calibration. The structural term is unaffected by these differences, as distance shares depend solely on the speed profile and the field-weakening boundary curve, which are determined by motor electromagnetic parameters and gear ratio. In contrast, the intensity term incorporates both motor efficiency and demand-side differences between the vehicles. To quantify this confounding factor, the motor-to-wheel energy ratio (E_motor/W_wheel) was calculated for each vehicle and cycle, where W_wheel represents the integrated positive road-load power. On the US06 cycle, this ratio is 1.194 for both vehicles, indicating that the per-distance gap (31.6 Wh/km) is entirely due to the Bolt's higher wheel-energy demand (143 versus 117 Wh/km), attributable to its greater mass and aerodynamic drag. In the WLTP cycle, demand-side differences account for 80% of the 23.5 Wh/km gap, while motor-efficiency differences account for the remaining 20%. On the HWFET cycle, the Bolt is marginally more efficient per unit of wheel energy despite operating predominantly in field weakening, so the entire 18.0 Wh/km gap is demand-driven. On the UDDS cycle, where both vehicles exhibit similar wheel-energy demands at lower average speeds, motor-efficiency differences account for 74% of the 15.0 Wh/km gap. Per-distance normalisation was retained as the primary basis because it yields results in the conventional Wh/km metric and ensures comparability with published BEV energy studies. The structural shares presented in Table 6 quantify the combined effects of motor regime allocation and vehicle platform on per-distance consumption.
 
 **Table 6.** Cross-vehicle LMDI-I decomposition (Wh/km, motor level). Comparison direction: Tesla Model 3 (g = 9.04) to Chevrolet Bolt EV (g = 7.05) on the same drive cycle. Positive values indicate higher consumption for the Bolt.
 
@@ -324,11 +377,13 @@ Vehicle-level Wh/km serves as the standard metric for comparing battery electric
 
 Comparisons between the UDDS and HWFET, as well as the UDDS and US06 cycles for the Tesla Model 3, exemplify this distinction. In both cases, energy consumption increases on the more demanding cycle. The difference between UDDS and HWFET (+21.8 Wh/km) is attributable entirely to intensity, as both cycles operate within the MTPA regime, and the higher cruise speed of the HWFET increases per-kilometre losses within that regime. In contrast, the UDDS to US06 difference (+53.1 Wh/km) is 78% structural, since the US06 introduces field-weakening operation absent in the UDDS. Although vehicle-level Wh/km treats these as equivalent increases in consumption, the decomposition identifies that the underlying causes are fundamentally different.
 
-The cross-vehicle comparison further supports this finding. The Bolt EV consumes between 18.0 and 31.6 Wh/km more than the Tesla Model 3 across matched cycles [78, 79], with structural effects accounting for 88 to 99% of the difference in three out of four cycles. While a vehicle-level comparison might attribute this gap to aggregate efficiency differences between the two motors, the decomposition demonstrates that the Bolt EV's higher consumption primarily results from increased residence in the field-weakening regime, a consequence of its lower onset speed (88.4 km/h compared to 117.6 km/h), rather than from inferior per-regime efficiency.
+The cross-vehicle comparison further supports this finding. The Bolt EV consumes between 18.0 and 31.6 Wh/km more than the Tesla Model 3 across matched cycles [78], with structural effects accounting for 88 to 99% of the difference in three out of four cycles. While a vehicle-level comparison might attribute this gap to aggregate efficiency differences between the two motors, the decomposition indicates that the Bolt EV's higher consumption is predominantly attributable to increased residence in the field-weakening regime, a consequence of its lower onset speed (88.4 km/h compared to 117.6 km/h). The intensity term, which is small on three of four cycles, absorbs both motor efficiency and demand-side differences between the two vehicles (Section 5.2).
 
-The gear ratio sweep isolates the effect of transmission ratio on regime exposure while maintaining all other vehicle parameters constant. Increasing the gear ratio from 7.0 to 11.0 increases motor-level consumption by 5.2 Wh/km on the UDDS and 14.4 Wh/km on the Artemis Motorway 130. For high-speed cycles, the structural and intensity contributions are both significant and partially offset each other. On the US06 cycle, the structural contribution is 59.4 Wh/km, while the intensity contribution is -47.8 Wh/km, resulting in a net penalty of 11.6 Wh/km. This net figure understates the structural cost of the regime shift because the motor operates at partial load within a broader field-weakening band, thereby reducing per-regime intensity. A lower gear ratio avoids field-weakening operation on moderate-speed cycles but reduces available wheel torque at low vehicle speeds. Conversely, a higher gear ratio provides greater launch torque but incurs a structural energy penalty on motorway and aggressive cycles. The LMDI decomposition quantifies this trade-off for each combination of cycle and gear ratio, offering a basis for gear ratio selection [93] that incorporates the structural energy cost of regime transition.
+The gear ratio sweep demonstrates the added value of the decomposition beyond per-regime energy reporting. On the US06 cycle, increasing the gear ratio from 7.0 to 11.0 raises motor-level consumption by 11.6 Wh/km. Table 7 shows that field-weakening distance increases from 0% to 79.1%. However, per-regime data alone cannot determine how much of the 11.6 Wh/km increase is due to the regime shift versus changes in within-regime efficiency. The LMDI decomposition attributes +59.4 Wh/km to structural changes and -47.8 Wh/km to intensity changes. The structural cost is five times the net penalty because the motor operates at partial load within the expanded field-weakening band, which reduces per-regime intensity and partially offsets the regime-shift cost. If field-weakening efficiency declines due to thermal loading or motor ageing, this offset decreases and the net penalty approaches the full structural value. This exposure is not visible in aggregate Wh/km comparisons. In general, a lower gear ratio avoids field-weakening during moderate-speed cycles but reduces available wheel torque. A higher gear ratio increases launch torque but results in a structural energy penalty during motorway and aggressive cycles. The LMDI decomposition quantifies this trade-off for each cycle and gear ratio combination, providing a basis for gear ratio selection [88] that accounts for the structural energy cost of regime transitions.
 
-The regime shares presented in Table 3 indicate that a single vehicle can experience fundamentally different structural exposures depending on the drive cycle. For the Tesla Model 3 at a gear ratio of 9.04, both the UDDS and HWFET operate exclusively in the MTPA regime, whereas the Artemis Motorway 130 allocates 70.3% of distance to field-weakening operation. A regulatory assessment based solely on the UDDS would not capture the structural energy cost incurred by this vehicle under motorway conditions. In contrast, the Bolt EV demonstrates the opposite pattern: all evaluated cycles, including the UDDS, enter the field-weakening regime, so no regulatory cycle fully avoids the structural energy cost of field-weakening operation for this vehicle. The Artemis Motorway 130, based on measured European driving data, captures motorway conditions that are understated by regulatory cycles. The 70.3% field-weakening share for the Tesla Model 3 on this cycle, compared with 21.4% on the WLTP and 0% on the UDDS, quantifies the discrepancy between regulatory and on-road structural exposure. This finding has implications for energy labelling and range estimation, as the choice of reference cycle determines whether the structural energy cost of field-weakening operation is reflected in the published consumption figure.
+The regime shares presented in Table 3 indicate that a single vehicle can experience fundamentally different structural exposures depending on the drive cycle. For the Tesla Model 3 at a gear ratio of 9.04, both the UDDS and HWFET operate exclusively in the MTPA regime, whereas the Artemis Motorway 130 allocates 70.3% of distance to field-weakening operation. A regulatory assessment based solely on the UDDS would not capture the structural energy cost incurred by this vehicle under motorway conditions. In contrast, the Bolt EV demonstrates the opposite pattern: all evaluated cycles, including the UDDS, enter the field-weakening regime, so no regulatory cycle fully avoids the structural energy cost of field-weakening operation for this vehicle. The Artemis Motorway 130, based on measured European driving data, sustains speeds above the field-weakening onset for extended periods. Although the WLTP Extra High sub-phase reaches a comparable peak speed (131 km/h), it does not maintain sustained residence above the onset threshold. The 70.3% field-weakening share for the Tesla Model 3 on the Artemis cycle, compared with 21.4% on the WLTP and 0% on the UDDS, quantifies the discrepancy between regulatory and on-road structural exposure. This finding has implications for energy labelling and range estimation, as the choice of reference cycle determines whether the structural energy cost of field-weakening operation is reflected in the published consumption figure.
+
+The decomposition results reported above use the CRG-derived boundary at 370 V (B3) as the baseline. As demonstrated in Section 5.1, the choice of boundary definition changes the UDDS to US06 structural share by 82 percentage points. Several findings remain robust to this choice. The structural term remains positive across all five methods, indicating that the US06 consistently incurs a structural energy cost from field-weakening operation, regardless of boundary definition. The UDDS to HWFET decomposition produces a zero structural contribution across all methods, as neither cycle attains field-weakening speeds under any boundary definition. The cross-vehicle comparison is similarly robust: both vehicles are assessed using the same boundary method, and the difference in field-weakening onset speed between the Tesla and the Bolt (118 km/h versus 88 km/h) exceeds the sensitivity range of any single boundary definition. However, the precise structural share for the UDDS to US06 pair (78% under B3 at 370 V) is not robust to the boundary definition. Under B3 voltage assumptions, this share varies from 42% to 103%. Across all five methods, the range is 21% to 103%. Whether the structural term constitutes a majority of the energy difference depends on the boundary definition employed.
 
 Several limitations should be acknowledged in this study. The dynamometer data are recorded at 10 Hz, resulting in sub-second transients in torque and current being averaged within each sample. For the Tesla Model 3, iron losses are calculated from d-q current lookup tables during post-processing, rather than from coupled electromagnetic simulations. For the Bolt EV, motor parameters such as permanent magnet flux linkage and stator resistance are obtained from published finite element analysis and benchmarking reports [72–74], not from direct motor testing. The traction driver employs a proportional-integral controller to track the reference speed profile, which does not replicate the full range of human driving variability, including anticipatory braking and variable pedal modulation. Additionally, the analysis is restricted to single-speed drivetrains; multi-speed or continuously variable transmissions would necessitate additional regime definitions and a revised structural decomposition framework.
 
@@ -336,17 +391,17 @@ The Artemis Motorway 130 results extend the model into sustained field-weakening
 
 ## 7. Conclusion
 
-LMDI-I decomposition was applied within the battery electric vehicle powertrain for the first time, partitioning drive cycle energy consumption into structural effects (regime residence) and intensity effects (per-regime efficiency) for two production vehicles validated across four drive cycles and extended to a fifth.
+LMDI-I decomposition was applied within the battery electric vehicle powertrain, partitioning drive cycle energy consumption into structural effects (regime residence) and intensity effects (per-regime efficiency) for two production vehicles validated across four drive cycles and extended to a fifth.
 
-For the Tesla Model 3 at a gear ratio of 9.04, structural effects account for 78% of the 53.1 Wh/km difference between the UDDS and US06 cycles. The difference between UDDS and HWFET cycles (+21.8 Wh/km) is entirely due to intensity, confirming that the decomposition distinguishes regime-shift energy costs from within-regime efficiency changes. Cross-vehicle comparisons on matched cycles attribute 88 to 99% of the motor-level energy difference between the Tesla and Bolt EV to structural effects on three of four cycles. The Bolt EV enters field-weakening operation at 88.4 km/h, compared with 117.6 km/h for the Tesla, despite a lower gear ratio (7.05 versus 9.04). Motor design parameters determine regime exposure.
+For the Tesla Model 3 at a gear ratio of 9.04, structural effects account for 78% of the 53.1 Wh/km difference between the UDDS and US06 cycles under the baseline boundary definition (B3 at 370 V). The difference between UDDS and HWFET cycles (+21.8 Wh/km) is entirely due to intensity, confirming that the decomposition distinguishes regime-shift energy costs from within-regime efficiency changes. Cross-vehicle comparisons on matched cycles attribute 88 to 99% of the motor-level energy difference between the Tesla and Bolt EV to structural effects on three of four cycles. The Bolt EV enters field-weakening operation at 88.4 km/h, compared with 117.6 km/h for the Tesla, despite a lower gear ratio (7.05 versus 9.04). For the two IPM machines evaluated, motor design parameters are the primary determinant of regime exposure.
 
-The regime boundary method alters energy attribution by as much as 57 percentage points for identical simulation data. Five boundary definitions, ranging from a simplified back-EMF voltage limit to a torque-dependent trajectory derived from the motor's operating point, yield the same net energy consumption but partition it differently between the structural and intensity terms. The regime boundary represents an energy accounting decision with significant consequences for attribution.
+The regime boundary method alters energy attribution by as much as 82 percentage points for identical simulation data. Three boundary methods with increasing physical realism, supplemented by voltage sensitivity at three DC bus levels, yield five definitions that produce the same net energy consumption but partition it differently between the structural and intensity terms. The regime boundary represents an energy accounting decision with significant consequences for attribution.
 
 An increase in gear ratio from 7.0 to 11.0 raises motor-level consumption by 5.2 to 14.4 Wh/km, depending on the drive cycle. On high-speed cycles, the structural and intensity contributions are both substantial and partially offsetting. For example, on the US06 cycle, the structural term is +59.4 Wh/km and the intensity term is -47.8 Wh/km, resulting in a net penalty of +11.6 Wh/km. The net consumption figure alone understates the structural cost associated with the regime shift.
 
 Model estimates for the Artemis Motorway 130, which does not include a dynamometer validation target, show that the Tesla operates in the field-weakening regime for 70.3% of the distance. This contrasts with 21.4% on the WLTP and 0% on the UDDS. Regulatory cycles that rely on urban and suburban speed profiles fail to account for the structural energy cost associated with field-weakening operation during motorway conditions. The decomposition provides a quantitative diagnostic for linking drive cycle definition, motor design, and transmission gearing to energy consumption in battery electric vehicles.
 
-Future research will extend the decomposition to multi-speed drivetrains [43, 44, 47], incorporate thermal effects on motor parameters [71], and apply the method to on-road driving data recorded under varying ambient conditions [19, 89].
+Future research will extend the decomposition to multi-speed drivetrains [43, 44, 47], incorporate thermal effects on motor parameters [71], and apply the method to on-road driving data recorded under varying ambient conditions [18, 19].
 
 ---
 
@@ -422,42 +477,63 @@ Future research will extend the decomposition to multi-speed drivetrains [43, 44
 68. Kim N, Duoba M, Kim N, Rousseau A. Validating volt PHEV model with dynamometer test data using Autonomie. *SAE International Journal of Passenger Cars* 2013;6(2):985-992.
 69. Argonne National Laboratory. Downloadable Dynamometer Database (D3). Available at: https://www.anl.gov/taps/downloadable-dynamometer-database (accessed July 2026).
 70. Lohse-Busch H, Duoba M, Rask E, Stutenberg K, Gowri V, Slezak L, Anderson D. Ambient temperature (20F, 72F and 95F) impact on fuel and energy consumption for several conventional vehicles, hybrid and plug-in hybrid electric vehicles and battery electric vehicle. *SAE Technical Paper* 2013;2013-01-1462.
-71. Stutenberg K, Rask E, Lohse-Busch H. Comparative analysis of thermal management systems in electric vehicles at extreme weather conditions. *Energy Conversion and Management* 2025;(submitted/preprint).
+71. Al Haddad R, Mansour C, Kim N, Seo J, Nemer M. Comparative analysis of thermal management systems in electric vehicles at extreme weather conditions: case study on Nissan Leaf 2019 Plus, Chevrolet Bolt 2020 and Tesla Model 3 2020. *Energy Conversion and Management* 2025;326:119706. https://doi.org/10.1016/j.enconman.2025.119706
 72. Burress TA, Campbell SL, Coomer CL, Ayers CW, Wereszczak AA, Cunningham JP, Marlino LD, Seiber LE, Lin HT. Evaluation of the 2010 Toyota Prius hybrid synergy drive system. ORNL/TM-2010/253, Oak Ridge National Laboratory, 2011.
 73. Hsu JS. Report on Toyota/Prius motor torque-capability, torque-property, no-load back EMF, and mechanical losses. ORNL/TM-2004/185, Oak Ridge National Laboratory, 2004.
 74. Burress TA. Benchmarking EV and HEV power electronics and electric machines. *IEEE Transportation Electrification Conference and Expo (ITEC)*, 2013;1-6.
 75. Rahman KM, Jurkovic S, Stancu C, Morgante J, Savagian PJ. Design and performance of electrical propulsion system of extended range electric vehicle (EREV) Chevrolet Volt. *IEEE Transactions on Industry Applications* 2015;51(3):2479-2488.
-76. SAE paper: Electric motor design of General Motors' Chevrolet Bolt electric vehicle. *SAE Technical Paper* 2016;2016-01-1228.
+76. Momen F, Rahman KM, Son Y, Savagian PJ. Electric motor design of General Motors' Chevrolet Bolt electric vehicle. *SAE International Journal of Alternative Powertrains* 2016;5(2):286-293.
 77. Husain I, Ozpineci B, Islam MS, Gurpinar E, Su GJ, Yu W, Chowdhury S, Xue L, Rahman D, Sahu R. Electric drive technology trends, challenges, and opportunities for future electric vehicles. *Proceedings of the IEEE* 2021;109(6):917-948.
 78. Wolff S, Kalt S, Bstieler M, Lienkamp S. Quantifying the state of the art of electric powertrains in battery electric vehicles: comprehensive analysis of the Tesla Model 3 on the vehicle level. *World Electric Vehicle Journal* 2024;15(6):268.
-79. Wolff S, Fuelle F, Stiglmayr M, Lienkamp S. Quantifying the state of the art of electric powertrains in battery electric vehicles: range, efficiency, and lifetime from component to system level of the Volkswagen ID.3. *eTransportation* 2022;12:100167.
-80. US Department of Energy. Electric Drive Technical Team Roadmap. March 2024.
-81. Boldea I, Tutelea LN, Parsa L, Dorrell D. Automotive electric propulsion systems with reduced or no permanent magnets: an overview. *IEEE Transactions on Industrial Electronics* 2014;61(10):5696-5711.
-82. Dorrell DG, Knight AM, Popescu M, Evans L, Staton DA. Comparison of different motor design drives for hybrid electric vehicles. *Energy Conversion Congress and Exposition (ECCE)*, IEEE, 2010;3352-3359.
-83. El-Refaie AM. Motors/generators for traction/propulsion applications: a review. *IEEE Vehicular Technology Magazine* 2013;8(1):90-99.
-84. Ozpineci B. Oak Ridge National Laboratory annual progress report for the power electronics and electric motors program. ORNL/TM-2014/598, 2015.
-85. Saltelli A, Ratto M, Andres T, Campolongo F, Cariboni J, Gatelli D, Saisana M, Tarantola S. Global sensitivity analysis: the primer. John Wiley and Sons, 2008.
-86. Hamby DM. A review of techniques for parameter sensitivity analysis of environmental models. *Environmental Monitoring and Assessment* 1994;32(2):135-154.
-87. Pannell DJ. Sensitivity analysis of normative economic models: theoretical framework and practical strategies. *Agricultural Economics* 1997;16(2):139-152.
-88. MathWorks. Using sensitivity analysis to optimize powertrain design for fuel economy. *MATLAB Technical Article*, 2023.
-89. Miri I, Fotouhi A, Ewin N. Electric vehicle energy consumption modelling and estimation -- a case study. *International Journal of Energy Research* 2021;45(1):501-520.
-90. Schmidt M. The Sankey diagram in energy and material flow management. *Journal of Industrial Ecology* 2008;12(1):82-94.
-91. Ceraolo M, Lutzemberger G, Huria T. Experimentally determined models for high-power lithium batteries. *SAE Technical Paper* 2011;2011-01-1365.
-92. Mahmoudi A, Soong WL, Pellegrino G, Armando E. Loss function modeling of efficiency maps of electric machines. *IEEE Transactions on Industry Applications* 2017;53(5):4221-4231.
-93. Ramakrishnan K, Stipetic S, Gobbi M, Mastinu G. Multi-objective optimization of electric vehicle powertrain using scalable saturated motor model. *Energies* 2019;12(23):4490.
-94. Hentunen A, Lehmuspelto T, Suomela J. Time-domain parameter extraction method for Thevenin-equivalent circuit battery models. *IEEE Transactions on Energy Conversion* 2014;29(3):558-566.
-95. He H, Xiong R, Fan J. Evaluation of lithium-ion battery equivalent circuit models for state of charge estimation by an experimental approach. *Energies* 2011;4(4):582-598.
-96. Plett GL. Extended Kalman filtering for battery management systems of LiPB-based HEV battery packs: Part 3. State and parameter estimation. *Journal of Power Sources* 2004;134(2):277-292.
-97. Hu X, Li S, Peng H. A comparative study of equivalent circuit models for Li-ion batteries. *Journal of Power Sources* 2012;198:359-367.
-98. Ehsani M, Gao Y, Longo S, Ebrahimi K. Modern electric, hybrid electric, and fuel cell vehicles: fundamentals, theory, and design. 3rd ed. CRC Press, 2018.
-99. Mohan N. Advanced electric drives: analysis, control, and modeling using MATLAB/Simulink. John Wiley and Sons, 2014.
-100. Krishnan R. Permanent magnet synchronous and brushless DC motor drives. CRC Press, 2010.
-101. Larminie J, Lowry J. Electric vehicle technology explained. 2nd ed. John Wiley and Sons, 2012.
-102. Chau KT. Electric vehicle machines and drives: design, analysis and application. John Wiley and Sons, 2015.
-103. Patel HD, Deshpande Y, Patel VN, Thakar V, Panchal S, Fraser R, Fowler M. Teardown analysis and FEA motor model of Chevrolet Bolt EV drivetrain. *2025 IEEE/AIAA Transportation Electrification Conference and Electric Aircraft Technologies Symposium (ITEC+EATS)*, IEEE, 2025;1-6.
-104. Allca-Pekarovic A, Kollmeyer P, Forsyth A, Emadi A. Experimental characterisation and modelling of a YASA P400 axial flux PM traction machine for performance analysis of a Chevy Bolt EV. *IEEE Transactions on Industry Applications* 2024;60(2):3108-3119.
+79. US Department of Energy. Electric Drive Technical Team Roadmap. March 2024.
+80. Boldea I, Tutelea LN, Parsa L, Dorrell D. Automotive electric propulsion systems with reduced or no permanent magnets: an overview. *IEEE Transactions on Industrial Electronics* 2014;61(10):5696-5711.
+81. Dorrell DG, Knight AM, Popescu M, Evans L, Staton DA. Comparison of different motor design drives for hybrid electric vehicles. *Energy Conversion Congress and Exposition (ECCE)*, IEEE, 2010;3352-3359.
+82. El-Refaie AM. Motors/generators for traction/propulsion applications: a review. *IEEE Vehicular Technology Magazine* 2013;8(1):90-99.
+83. Ozpineci B. Oak Ridge National Laboratory annual progress report for the power electronics and electric motors program. ORNL/TM-2014/598, 2015.
+84. Saltelli A, Ratto M, Andres T, Campolongo F, Cariboni J, Gatelli D, Saisana M, Tarantola S. Global sensitivity analysis: the primer. John Wiley and Sons, 2008.
+85. Schmidt M. The Sankey diagram in energy and material flow management. *Journal of Industrial Ecology* 2008;12(1):82-94.
+86. Ceraolo M, Lutzemberger G, Huria T. Experimentally determined models for high-power lithium batteries. *SAE Technical Paper* 2011;2011-01-1365.
+87. Mahmoudi A, Soong WL, Pellegrino G, Armando E. Loss function modeling of efficiency maps of electric machines. *IEEE Transactions on Industry Applications* 2017;53(5):4221-4231.
+88. Ramakrishnan K, Stipetic S, Gobbi M, Mastinu G. Multi-objective optimization of electric vehicle powertrain using scalable saturated motor model. *Energies* 2019;12(23):4490.
+89. Hentunen A, Lehmuspelto T, Suomela J. Time-domain parameter extraction method for Thevenin-equivalent circuit battery models. *IEEE Transactions on Energy Conversion* 2014;29(3):558-566.
+90. He H, Xiong R, Fan J. Evaluation of lithium-ion battery equivalent circuit models for state of charge estimation by an experimental approach. *Energies* 2011;4(4):582-598.
+91. Plett GL. Extended Kalman filtering for battery management systems of LiPB-based HEV battery packs: Part 3. State and parameter estimation. *Journal of Power Sources* 2004;134(2):277-292.
+92. Hu X, Li S, Peng H. A comparative study of equivalent circuit models for Li-ion batteries. *Journal of Power Sources* 2012;198:359-367.
+93. Ehsani M, Gao Y, Longo S, Ebrahimi K. Modern electric, hybrid electric, and fuel cell vehicles: fundamentals, theory, and design. 3rd ed. CRC Press, 2018.
+94. Mohan N. Advanced electric drives: analysis, control, and modeling using MATLAB/Simulink. John Wiley and Sons, 2014.
+95. Krishnan R. Permanent magnet synchronous and brushless DC motor drives. CRC Press, 2010.
+96. Larminie J, Lowry J. Electric vehicle technology explained. 2nd ed. John Wiley and Sons, 2012.
+97. Chau KT. Electric vehicle machines and drives: design, analysis and application. John Wiley and Sons, 2015.
+98. Patel HD, Deshpande Y, Patel VN, Thakar V, Panchal S, Fraser R, Fowler M. Teardown analysis and FEA motor model of Chevrolet Bolt EV drivetrain. *2025 IEEE/AIAA Transportation Electrification Conference and Electric Aircraft Technologies Symposium (ITEC+EATS)*, IEEE, 2025;1-6.
+99. Allca-Pekarovic A, Kollmeyer P, Forsyth A, Emadi A. Experimental characterisation and modelling of a YASA P400 axial flux PM traction machine for performance analysis of a Chevy Bolt EV. *IEEE Transactions on Industry Applications* 2024;60(2):3108-3119.
 
 ---
 
-*Draft created: 26 July 2026*
-*All numbers verified against PaperB_Dashboard.html*
+## Acknowledgements
+
+The authors gratefully acknowledge Argonne National Laboratory for making the D3 dynamometer dataset publicly available. The work was conducted during an industrial placement at the University of East London, School of Architecture, Computing and Engineering.
+
+## Funding
+
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+## CRediT authorship contribution statement
+
+Faisal Shah Khan: Conceptualisation, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Writing -- original draft, Visualisation. Thamo Sutharssan: Supervision, Writing -- review and editing.
+
+## Declaration of competing interest
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+## Code availability
+
+The Simulink models (AE_TeslaM3_LMDI.slx, AE_BoltEV_LMDI.slx), parameter files (AE_TeslaM3_LMDI_Params.m, AE_BoltEV_LMDI_Params.m), LMDI decomposition scripts (AE_lmdi_decomposition.m, AE_regime_binning.m, AE_run_LMDI_matrix.m), and figure generation scripts are publicly available at: https://github.com/Faisal-dev-pro/BEV-LMDI-Paper-B. The repository includes a version-tagged release corresponding to the simulation results reported in this paper.
+
+## Data availability
+
+The ANL D3 dynamometer test data used for model validation are publicly available from the Argonne National Laboratory Downloadable Dynamometer Database [69]. Battery-level validation targets (Table 2) were obtained from the 2020 Tesla Model 3 Standard Range Plus and the 2020 Chevrolet Bolt EV test records. The motor-level test identifiers used for Hioki power analyser validation are listed in Section 4.3. All post-processing scripts required to reproduce the LMDI decomposition from the raw ANL data are included in the GitHub repository above.
+
+## Declaration of generative AI and AI-assisted technologies in the writing process
+
+During the preparation of this manuscript the authors used AI-assisted language tools (Claude, Anthropic) and Grammarly to improve readability and to check phrasing. All scientific content, analysis, numerical results, and conclusions were produced entirely by the authors. The authors reviewed and edited all AI-assisted text and take full responsibility for the content of this publication.
+
