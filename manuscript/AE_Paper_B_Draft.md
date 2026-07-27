@@ -13,10 +13,10 @@
 ## Highlights
 
 1. LMDI decomposition is implemented within the BEV powertrain for the first time.
-2. Validation of two production vehicles demonstrates accuracy within 5% across four drive cycles.
+2. Two production vehicles validated within 5% across four drive cycles.
 3. Structural effects explain 78% of the energy gap between UDDS and US06 drive cycles.
-4. The regime boundary method alters energy attribution by as much as 57 percentage points.
-5. Motor design, rather than gear ratio, determines energy exposure in high-speed regimes.
+4. Regime boundary method alters energy attribution by 57 percentage points.
+5. Motor design, not gear ratio, determines energy exposure in high-speed regimes.
 
 ---
 
