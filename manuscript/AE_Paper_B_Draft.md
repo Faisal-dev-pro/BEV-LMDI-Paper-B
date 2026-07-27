@@ -74,13 +74,13 @@ The Tesla Model 3 is a 2020 Long Range all-wheel drive variant [78] equipped wit
 
 The Tesla motor is modelled as a d–q axis interior permanent magnet synchronous machine, with current reference commands generated from a maximum torque per ampere lookup table. The Bolt motor is modelled as an efficiency-map torque source, where electrical power is calculated as P_elec = T × ω + P_loss(T, n), with P_loss derived from a two-dimensional lookup table constructed from measured dynamometer data [92, 103, 104]. This modelling approach is necessary because magnetic saturation in the Bolt motor results in a 23% peak torque error at rated current when assuming constant inductance. Both vehicle models utilise a common longitudinal dynamics architecture, which includes a single-speed gearbox, coastdown-derived road load, and a battery equivalent circuit [91, 94–97]. Regenerative braking is implemented using a rule-based split-authority architecture that replicates production one-pedal behaviour [49–58]. The Tesla applies a coast deceleration of 0.15g, while the Bolt applies 0.04g, consistent with values measured from the Argonne dynamometer data. Regenerative braking fractions are validated directly against measured values. Details of the modelling environment, block diagrams, controller parameters, and driver logic are provided in the supplementary material.
 
-[Figure 1: Powertrain schematic illustrating the common longitudinal dynamics architecture with vehicle-specific motor and regenerative braking subsystems]
+![Figure 1: Powertrain schematic illustrating the common longitudinal dynamics architecture with vehicle-specific motor and regenerative braking subsystems](../results/figures/png/Fig1_powertrain_schematic.png)
 
 Validation targets are established using the Argonne National Laboratory Downloadable Dynamometer Database [67, 69], which provides publicly available chassis dynamometer data at 10 Hz recorded using standardised test procedures [68, 70]. Battery-level net energy consumption is determined from CAN-bus cumulative energy for the Tesla and from calibrated power analyser data (Hioki PW6001) for the Bolt, with both methods measuring high-voltage bus power at the battery terminals. The acceptance criterion is set at ±5% of the measured net Wh/km for each cycle. The LMDI decomposition is performed at the motor level, upstream of auxiliary loads and cable losses, to isolate the energy attributable to each operating regime.
 
 Five drive cycles are evaluated, covering a spectrum from urban to aggressive motorway conditions. The Urban Dynamometer Driving Schedule (UDDS, 1369 s) and Highway Fuel Economy Test (HWFET, 765 s) are United States Environmental Protection Agency (EPA) regulatory cycles for city and highway driving, respectively. The US06 Supplemental Federal Test Procedure (600 s) represents aggressive driving, with speeds reaching 129 km/h. The Worldwide Harmonized Light Vehicles Test Procedure (WLTP) Class 3 cycle (1800 s, 23.2 km) serves as the European regulatory cycle [60]. The Artemis Motorway 130 cycle (1068 s, 28.8 km, maximum 132 km/h), derived from measured European motorway driving [59], is included as a real-world representative profile. These cycles encompass conditions ranging from zero field-weakening operation to sustained extended-speed cruise. Figure 2 presents the speed profiles for all five cycles with field-weakening onset speeds indicated for both vehicles, illustrating the contrasting regime exposure.
 
-[Figure 2: Speed profiles for the five evaluated drive cycles, with field-weakening onset speeds for the Tesla Model 3 (117.6 km/h) and Chevrolet Bolt EV (88.4 km/h) indicated as horizontal thresholds]
+![Figure 2: Speed profiles for the five evaluated drive cycles, with field-weakening onset speeds for the Tesla Model 3 (117.6 km/h) and Chevrolet Bolt EV (88.4 km/h) indicated as horizontal thresholds](../results/figures/png/Fig7_drive_cycles.png)
 
 **Table 1.** Vehicle and motor parameters.
 
@@ -147,7 +147,7 @@ To evaluate the sensitivity of the decomposition to the voltage assumption, M3 i
 
 Regenerative braking timesteps are classified using the same speed-based criterion as traction timesteps, with torque magnitude estimated from battery power and motor speed. This approach ensures that high-speed regeneration is attributed to the field-weakening regime, thereby maintaining consistent net energy intensity across all three regimes.
 
-[Figure 3: Torque-speed diagram showing the three boundary methods (M1, M2, M3) and the resulting regime classification for the Tesla motor]
+![Figure 3: Torque-speed diagram showing the three boundary methods (M1, M2, M3) and the resulting regime classification for the Tesla motor](../results/figures/png/Fig2_boundary_methods.png)
 
 ## 4. Validation results
 
@@ -163,7 +163,7 @@ Regenerative braking fractions are validated alongside net consumption. The US06
 
 The Artemis Motorway 130 cycle does not have a corresponding Argonne dynamometer test. It is reported at 159.7 Wh/km at the battery level without a validation target.
 
-[Figure 4: Simulated and measured cumulative battery energy for the Tesla Model 3 on the US06 cycle]
+![Figure 4: Simulated and measured cumulative battery energy for the Tesla Model 3 and Chevrolet Bolt EV](../results/figures/png/Fig3_validation_energy.png)
 
 ### 4.2 Chevrolet Bolt EV
 
@@ -217,7 +217,7 @@ The sensitivity of the decomposition to regime boundary definitions is assessed 
 | Bolt | WLTP | 134.9 | 47.0 | 1.9 | 51.1 |
 | Bolt | US06 | 170.7 | 9.4 | 1.1 | 89.5 |
 
-[Figure 5: Stacked bar chart of motor operating regime distance shares (MTPA, transition, field weakening) for four vehicle configurations (Tesla at g = 7.0, 9.04, and 11.0; Bolt EV) across five drive cycles]
+![Figure 5: Stacked bar chart of motor operating regime distance shares (MTPA, transition, field weakening) for four vehicle configurations across five drive cycles](../results/figures/png/Fig8_regime_shares.png)
 
 **Table 4.** Cross-cycle LMDI-I decomposition (Wh/km, motor level). The structural share S indicates the proportion of the total difference attributable to changes in regime residence.
 
@@ -246,13 +246,13 @@ All residuals below 4 x 10^-14 Wh/km. The UDDS to HWFET pair for the Tesla yield
 
 The structural share ranges from 20.9% (M1) to 102.5% (M3 at 350 V), a span of 82 percentage points. An S share exceeding 100% indicates a negative intensity contribution: a wider field-weakening band reduces per-regime intensity, offsetting the structural cost.
 
-[Figure 6: Structural share of the UDDS to US06 energy difference under five boundary definitions (M1, M2, M3 at three voltages), showing an 82 percentage point spread across methods]
+![Figure 6: Structural share of the UDDS to US06 energy difference under five boundary definitions, showing an 82 percentage point spread](../results/figures/png/Fig9_boundary_sensitivity.png)
 
-[Figure 7: LMDI waterfall diagram for the UDDS to US06 pair, Tesla Model 3 at g = 9.04]
+![Figure 7: LMDI waterfall diagram for the UDDS to US06 pair, Tesla Model 3 at g = 9.04](../results/figures/png/Fig4_waterfall_UDDS_US06.png)
 
-[Figure 8: Per-timestep operating points on the torque-speed plane for the UDDS and US06 cycles (left), with LMDI waterfall diagrams for UDDS to US06 (78% structural, upper right) and UDDS to HWFET (0% structural, lower right), demonstrating the contrasting decomposition mechanisms]
+![Figure 8: Per-timestep operating points on the torque-speed plane for the UDDS and US06 cycles, with LMDI waterfall diagrams for UDDS to US06 (78% structural) and UDDS to HWFET (0% structural)](../results/figures/png/Fig_Centrepiece.png)
 
-[Figure 9: Sankey energy flow diagrams for the UDDS and US06 cycles (Tesla Model 3, g = 9.04), showing gross traction energy splitting across motor operating regimes with stream widths proportional to Wh/km and per-regime traction, regeneration, and net energy annotated]
+![Figure 9: Sankey energy flow diagrams for the UDDS and US06 cycles (Tesla Model 3, g = 9.04), showing gross traction energy splitting across motor operating regimes](../results/figures/png/Fig_Sankey.png)
 
 ### 5.2 Cross-vehicle comparison
 
@@ -275,7 +275,7 @@ The Bolt features a lower gear ratio (7.05 versus 9.04), which would typically r
 
 On HWFET, US06, and WLTP, 88 to 99% of the motor-level energy difference between the two vehicles is structural. The Bolt operates in field weakening for 82.3% (HWFET), 89.5% (US06), and 51.1% (WLTP) of its distance, while the Tesla remains in the MTPA regime on HWFET and allocates 36.3% (US06) and 21.4% (WLTP) to field weakening.
 
-[Figure 10: Structural and intensity contributions for each cross-vehicle cycle pair]
+![Figure 10: Structural and intensity contributions for each cross-vehicle cycle pair](../results/figures/png/Fig5_cross_vehicle.png)
 
 ### 5.3 Gear ratio design implications
 
@@ -314,9 +314,9 @@ Net energy intensity is in Wh/km at the motor level. At g = 7.0, all cycles oper
 
 On cycles where the gear change introduces field-weakening operation (WLTP, US06, Artemis), the structural and intensity contributions are both large and partially offsetting. The structural term exceeds the total because shifting distance into field weakening simultaneously reduces per-regime intensity. On cycles where both gear ratios remain in the MTPA regime (UDDS at g = 7.0 to 9.04), the entire penalty is attributed to intensity.
 
-[Figure 11: Structural and intensity contributions to the cross-gear LMDI decomposition (g = 7.0 to 11.0) for five drive cycles, with net total indicated by diamond markers]
+![Figure 11: Structural and intensity contributions to the cross-gear LMDI decomposition (g = 7.0 to 11.0) for five drive cycles](../results/figures/png/Fig10_cross_gear.png)
 
-[Figure 12: Field-weakening distance share versus gear ratio for five drive cycles]
+![Figure 12: Field-weakening distance share versus gear ratio for five drive cycles](../results/figures/png/Fig6_FW_vs_gear.png)
 
 ## 6. Discussion
 
