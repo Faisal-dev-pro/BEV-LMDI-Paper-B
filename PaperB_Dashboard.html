@@ -1320,23 +1320,25 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 <div class="section-header">
   <span class="section-number">09</span>
   <span class="section-title">Figures Tracker</span>
-  <span class="section-subtitle">2 draft + 4 data ready &middot; 0 final</span>
+  <span class="section-subtitle">12 figures &middot; all complete</span>
 </div>
 
 <div class="card">
 <table>
-<thead><tr><th style="width:40px">#</th><th>Figure</th><th style="width:60px">Impr.</th><th>Data Source</th><th style="width:90px">Status</th></tr></thead>
+<thead><tr><th style="width:40px">#</th><th>Figure</th><th style="width:60px">Section</th><th style="width:90px">Status</th></tr></thead>
 <tbody>
-<tr><td class="mono">F1</td><td>FW boundary comparison (M1 vs M2 vs M3)</td><td class="mono">1</td><td>FW_boundary_comparison.mat</td><td><span class="badge badge-pending"><span class="badge-dot yellow"></span> Data ready</span></td></tr>
-<tr><td class="mono">F2</td><td>Sankey: US06 energy flow (regime-tagged)</td><td class="mono">7</td><td>sankey_energy_flow.mat</td><td><span class="badge badge-wip"><span class="badge-dot blue"></span> Draft</span></td></tr>
-<tr><td class="mono">F3</td><td>Sankey: UDDS energy flow (regime-tagged)</td><td class="mono">7</td><td>sankey_energy_flow.mat</td><td><span class="badge badge-wip"><span class="badge-dot blue"></span> Draft</span></td></tr>
-<tr><td class="mono">F4</td><td>LMDI bar chart: structural vs intensity (4 configs)</td><td class="mono">3</td><td>LMDI postprocessing</td><td><span class="badge badge-pending">Pending</span></td></tr>
-<tr><td class="mono">F5</td><td>FW distance share vs gear ratio (5 cycles)</td><td class="mono">3</td><td>gear_design_analysis.mat</td><td><span class="badge badge-pending"><span class="badge-dot yellow"></span> Data ready</span></td></tr>
-<tr><td class="mono">F6</td><td>Design chart: Wh/km vs g with FW iso-lines</td><td class="mono">9</td><td>gear_design_analysis.mat</td><td><span class="badge badge-pending"><span class="badge-dot yellow"></span> Data ready</span></td></tr>
-<tr><td class="mono">F7</td><td>Tornado chart: parameter sensitivity</td><td class="mono">6</td><td>Sensitivity runs</td><td><span class="badge badge-pending">Pending</span></td></tr>
-<tr><td class="mono">F8</td><td>Validation scatter: sim vs ANL (all cycles)</td><td class="mono">8</td><td>Lit_cross_validation_notes.md</td><td><span class="badge badge-pending"><span class="badge-dot yellow"></span> Data ready</span></td></tr>
-<tr><td class="mono">F9</td><td>Tesla vs Bolt LMDI comparison</td><td class="mono">2</td><td>BoltEV_LMDI_results.mat + LMDI_matrix_results.mat</td><td><span class="badge badge-pending"><span class="badge-dot yellow"></span> Data ready</span></td></tr>
-<tr><td class="mono">F10</td><td>Artemis MW130 speed profile + FW zones</td><td class="mono">4</td><td>Artemis CSV</td><td><span class="badge badge-pending">Pending</span></td></tr>
+<tr><td class="mono">F1</td><td>Powertrain schematic</td><td class="mono">3.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F2</td><td>Drive cycle speed profiles with FW onset</td><td class="mono">3.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F3</td><td>Torque-speed boundary methods (M1, M2, M3)</td><td class="mono">3.3</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F4</td><td>Validation cumulative energy (Tesla + Bolt)</td><td class="mono">4.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F5</td><td>Regime share stacked bars (4 configs &times; 5 cycles)</td><td class="mono">5.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F6</td><td>Boundary sensitivity bars (82 pp spread)</td><td class="mono">5.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F7</td><td>LMDI waterfall UDDS to US06</td><td class="mono">5.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F8</td><td>Centrepiece: operating map + dual waterfall</td><td class="mono">5.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F9</td><td>Sankey energy flow (UDDS vs US06)</td><td class="mono">5.1</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F10</td><td>Cross-vehicle structural/intensity bars</td><td class="mono">5.2</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F11</td><td>Cross-gear LMDI decomposition bars</td><td class="mono">5.3</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
+<tr><td class="mono">F12</td><td>FW distance share vs gear ratio</td><td class="mono">5.3</td><td><span class="badge badge-pass"><span class="badge-dot green"></span> Done</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -1473,7 +1475,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
     <span>BEV LMDI Decomposition &middot; Paper B</span>
     <span>AppliedEnergy_Paper/PaperB_Dashboard.html</span>
   </div>
-  <span>Updated 25 Jul 2026 &middot; 12/12 improvements done &middot; TESLA 15/15 &middot; BOLT 4/4 PASS &middot; Bolt LMDI + cross-vehicle done &middot; Remaining: figures, writing</span>
+  <span>Updated 27 Jul 2026 &middot; 12/12 improvements done &middot; TESLA 15/15 &middot; BOLT 4/4 PASS &middot; All LMDI done &middot; 12 figures done &middot; 8 tables done &middot; 104 refs &middot; Draft complete (7661 words body)</span>
 </div>
 
 </div><!-- .container -->

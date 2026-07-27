@@ -480,3 +480,221 @@ Compound sentences use semicolons sparingly. Colons introduce lists or explanati
 ---
 
 *Guide compiled from: Le et al., Applied Energy 336 (2023) 120817; Li et al., Applied Energy 390 (2025) 125820.*
+
+---
+
+## 18. Word Budget (Applied Energy target: 6000-8000 words)
+
+Applied Energy research articles typically fall in the 6000-8000 word range. The previous plan targeted 12,000 words, which is too long. The revised allocation below targets approximately 7000 words (body text only, excluding references, figure captions, and table contents).
+
+| Section | Subsections | Words |
+|---------|-------------|-------|
+| Abstract | (standalone, 4-part structure per Section 2) | 250 |
+| 1. Introduction | Five-move sequence per Section 4 | 800 |
+| 2. Literature review | LMDI in energy, BEV energy analysis, gap statement | 700 |
+| 3. Methodology | 3.1 Vehicle models and validation data (400), 3.2 LMDI-I decomposition framework (500), 3.3 CRG-derived FW boundary as energy accounting boundary (500) | 1400 |
+| 4. Validation results | 4.1 Tesla Model 3 (400), 4.2 Chevrolet Bolt EV (400) | 800 |
+| 5. LMDI decomposition results | 5.1 Cross-cycle analysis (500), 5.2 Cross-vehicle comparison (500), 5.3 Gear ratio design implications (500) | 1500 |
+| 6. Discussion | Three threads: what decomposition reveals, design guideline, cycle assessment implications | 800 |
+| 7. Conclusions | Restate purpose, key findings with numbers, future work | 400 |
+| Highlights | 5 bullets, max 85 characters each | 50 |
+| **Total** | | **~6700** |
+
+The allocation is flexible within the 6000-8000 envelope. If validation or results need more space, compress the literature review. The methodology section carries the most weight because the CRG boundary comparison is the paper's central methods contribution.
+
+**Actual word count (27 Jul 2026):** 7661 words body text (Sections 1-7). Within target.
+
+---
+
+## 18a. Figure Map (12 figures)
+
+| Fig | Title | Section |
+|-----|-------|---------|
+| 1 | Powertrain schematic | 3.1 |
+| 2 | Drive cycle speed profiles with FW onset | 3.1 |
+| 3 | Torque-speed boundary methods (M1, M2, M3) | 3.3 |
+| 4 | Validation cumulative energy (Tesla + Bolt) | 4.1 |
+| 5 | Regime share stacked bars (4 configs x 5 cycles) | 5.1 |
+| 6 | Boundary sensitivity bars (82 pp spread) | 5.1 |
+| 7 | LMDI waterfall UDDS to US06 | 5.1 |
+| 8 | Centrepiece: operating map + dual waterfall | 5.1 |
+| 9 | Sankey energy flow (UDDS vs US06) | 5.1 |
+| 10 | Cross-vehicle structural/intensity bars | 5.2 |
+| 11 | Cross-gear LMDI decomposition bars | 5.3 |
+| 12 | FW distance share vs gear ratio | 5.3 |
+
+---
+
+## 19. Vocabulary Discipline
+
+This paper must read as an energy systems paper that uses a powertrain model, not a motors paper that mentions energy. The previous desk rejection (APEN-D-26-15578) failed because it read as a single-vehicle motors case study. Every framing decision below counters that perception.
+
+**In title, abstract, introduction, and conclusions:**
+Use the energy community's words. Say "operating regime" first, then define MTPA and field weakening as the regimes' physical basis. Say "structural effect" and "intensity effect" (native LMDI vocabulary). Say "energy accounting boundary" when introducing the FW boundary methods.
+
+**In methodology and results:**
+Machine terminology (MTPA, field weakening, d-q axes, current reference generator) is permitted because precise technical language is expected. But always introduce these terms through their energy meaning first.
+
+**Never lead a section with control engineering:**
+FOC, PI gains, six-step modulation, current loops. All of that is model instrumentation and lives in the methods subsection or supplementary material.
+
+**Avoid in the title:**
+IPMSM, field weakening, CRG, FOC, Simulink. The boundary method contribution is stated in the abstract, not the title.
+
+**Key phrase mappings:**
+
+| Motor/control term | Energy framing |
+|--------------------|----------------|
+| Field-weakening region | High-speed operating regime |
+| MTPA region | Base-speed operating regime |
+| CRG-derived FW boundary | Regime accounting boundary derived from motor operating trajectory |
+| Torque-speed envelope | Operating envelope |
+| Regime share S(r) | Structural factor (LMDI) |
+| Per-regime Wh/km I(r) | Intensity factor (LMDI) |
+
+Source: AE_Positioning.md (BEV_LMDI_Decomposition/AppliedEnergy_Paper).
+
+---
+
+## 20. AI Phrase Avoidance List
+
+Grammarly AI detection flags common AI-generated phrases. The following were identified during abstract drafting (July 2026) and must be avoided throughout the manuscript. Use the replacement or rephrase entirely.
+
+| Flagged phrase | AI score | Use instead |
+|----------------|----------|-------------|
+| "and real-world" | 15x | "and on-road" or "and measured" |
+| "mechanisms that govern" | 11x | "factors determining" or "factors responsible for" |
+| "that capture" | 10x | "representing" or "quantifying" |
+| "physical fidelity" | 20x | "physical accuracy" or "representational accuracy" |
+| "decomposition reveals" | 13x | restructure sentence to lead with the finding |
+| "high-speed operation" | 10x | "field-weakening operation" or "extended-speed operation" |
+| "These findings provide" | 70x | "The decomposition offers" or restructure |
+
+**General AI-style constructions to avoid:**
+
+| Pattern | Why flagged | Alternative |
+|---------|-------------|-------------|
+| "This study demonstrates that..." | Overused AI opener | Lead with the finding directly |
+| "It is worth noting that..." | Filler phrase | Delete; state the point |
+| "plays a crucial role in" | AI cliche | "determines" or "governs" or specific verb |
+| "a comprehensive analysis of" | AI padding | "an analysis of" |
+| "provides valuable insights into" | AI cliche | state the insight directly |
+| "sheds light on" | AI cliche | "clarifies" or "explains" |
+| "it is important to note" | AI filler | delete |
+| "in the context of" | overused | "for" or "during" or "under" |
+| "a novel approach to" | AI self-promotion | describe what the approach does |
+| "the findings suggest that" | 50x+ AI | state the finding as fact if supported |
+| "this highlights the importance of" | AI cliche | state why it matters directly |
+| "leveraging" | AI buzzword | "using" or "exploiting" |
+| "underscore" / "underscores" | AI favourite | "confirms" or "shows" |
+| "delves into" | AI cliche | "examines" or "analyses" |
+| "landscape" (metaphorical) | AI cliche | avoid entirely |
+| "holistic" | AI buzzword | "complete" or "integrated" |
+| "paradigm" | overused | avoid or use only if technically precise |
+| "multifaceted" | AI favourite | be specific about the facets |
+| em dash ( -- ) | AI punctuation | use comma, semicolon, or split sentence |
+
+---
+
+## 21. Author Style Preferences (Faisal Shah Khan)
+
+Observed from editorial passes on Introduction Moves 1-2 (July 2026). Apply throughout the manuscript.
+
+### Word-level preferences
+
+| Draft word/phrase | Faisal's preference | Note |
+|-------------------|---------------------|------|
+| a substantial share | a considerable part | |
+| range and efficiency | range and output | |
+| illustrates | highlights | |
+| tested | evaluated | |
+| procedures | protocols | |
+| separates | distinguishes | |
+| seldom extends below | rarely examine data below | |
+| figure (as in "Wh/km figure") | level | |
+| vary over | fluctuate throughout | |
+| cycle representativeness | the representativeness of test cycles | prefers "the [noun] of [noun]" over compound noun |
+| between (>2 items) | among | grammatically precise |
+| in particular | particularly | prefers adverb form |
+| is the established framework | is widely recognized as the standard framework | more explicit |
+| has been applied extensively | has been extensively applied | adverb before verb |
+| at the national and sectoral level | at both national and sectoral levels | "both...and" + plural |
+| have examined how the choice of | have investigated how the selection of | "investigated" over "examined", "selection" over "choice" |
+| affect | influence | |
+| three gaps persist | three significant gaps remain | "significant" added, "remain" over "persist" |
+| has not been applied | has not yet been employed | "yet" + "employed" over "applied" |
+| the boundary that distinguishes | the delineation between | "delineation" over "boundary that distinguishes" |
+| has not been treated as | has not been considered as | "considered" over "treated" |
+| materially alters | can substantially affect | "substantially" over "materially", "affect" over "alter" |
+| to establish whether | to determine whether | "determine" over "establish" |
+| generalise to | are generalizable to | adjective form |
+| contrasting design parameters | differing design parameters | "differing" over "contrasting" |
+| addresses these gaps | addresses existing limitations | "existing limitations" over "these gaps" |
+| The principal contributions are as follows | The primary contributions are outlined below | "outlined below" over "as follows" |
+| implemented | applied | prefers "applied" in contribution statements (cf. "employed" for gap statements) |
+| separate...into | partition...into | "partition" over "separate" |
+| representing the share of | which quantify the proportion of | relative clause with active verb |
+| representing per-regime | which measure...within each regime | relative clause, restates "each regime" |
+| contrasting motor designs | distinct motor designs | "distinct" over "contrasting" in contribution context |
+| of increasing physical realism | each offering progressively greater physical realism | participial with "progressively greater" |
+| is shown to alter | alters | direct active verb, drops passive "is shown to" |
+| by up to 57 | by as much as 57 | "as much as" over "up to" |
+| establishing that | demonstrating that | "demonstrating" over "establishing" |
+| constitutes a significant energy accounting decision | is a significant factor in energy accounting | "factor in" over "constitutes...decision" |
+| are conducted on | are performed using | "performed" over "conducted", "using" over "on" |
+| account for | explain | "explain" over "account for" in results context |
+| on three of four cycles evaluated | across three of four evaluated cycles | "across" + adjective before noun |
+| enters extended-speed operation at 88 km/h compared with 118 km/h for the Tesla | transitions to extended-speed operation at 88 km/h, whereas the Tesla Model 3 does so at 118 km/h | "transitions to" + "whereas" separate clause |
+| because motor design parameters rather than | indicating that motor design parameters, rather than | "indicating that" + comma-set "rather than" |
+| determine regime exposure | govern regime exposure | "govern" over "determine" |
+| The remainder of this paper is organised as follows | The structure of the paper is as follows | direct, no "remainder" |
+| reviews prior work | reviews previous research | "previous research" over "prior work" |
+| and on [second topic] | as well as studies on [second topic] | "as well as" over second "and on" |
+| describes the methodology | details the methodology | "details" over "describes" |
+| reports the validation results | presents validation results | drops article, "presents" over "reports" |
+| presents the LMDI results | provides the LMDI results | "provides" over "presents" (variety) |
+| discusses the implications | examines the implications | "examines" over "discusses" |
+| draws conclusions | concludes the paper | direct verb form |
+| captures (for intensity term) | reflects | "reflects" over "captures" for describing what a term does |
+| The method has been extensively | This method has been widely | "widely" over "extensively", "This" over "The" |
+| through both | using both | "using" over "through" |
+| capturing the sensitivity | to represent the sensitivity | infinitive over participial for purpose |
+| The influence of X has been quantified by several studies | Several studies have quantified the influence of X | active voice, subject-first |
+| for battery electric vehicles specifically | for battery electric vehicles | drop "specifically" |
+| These studies confirm | Collectively, these studies confirm | add "Collectively" for paragraph-closing synthesis |
+| depends on which regime is active | is determined by the active operating regime | passive, more concise |
+| the dominant topology | which are the dominant topology | relative clause with "which are" |
+| at the cost of | resulting in | participial over prepositional |
+| The speed at which this transition occurs | The transition speed between these regimes | noun phrase over relative clause |
+| how much of a given drive cycle falls within | the proportion of a drive cycle spent in | "proportion" over "how much" |
+| other loss mechanisms | other loss factors | "factors" over "mechanisms" |
+| the structural fact of residing in that regime | the structural effect of regime residence | nominal form |
+| Connecting these lines of inquiry | Bridging these research areas | "Bridging" over "Connecting", "research areas" over "lines of inquiry" |
+| The present study provides this connection | This study provides such a connection | "such a" over "this" |
+
+### Sentence-level preferences
+
+1. **Split at conjunctions.** Compound sentences joined by "yet" or "but" should be split into two sentences. Use "However," as the pivot opener for the second sentence.
+
+2. **Spell out acronyms in full on first use.** Even well-known acronyms (WLTP, US EPA) must be expanded on first use in the body text, with the abbreviation in parentheses. Separate from the abstract (which has its own first-use expansions).
+
+3. **Participial restructuring.** Prefers participial phrases ("resulting in variations in...") over compound clauses ("and the energy consumed... differs...") when describing consequences within a single sentence.
+
+4. **Explicit definitions over parallel shorthand.** Instead of compressed parallel constructions ("arising from where... and arising from how..."), prefers explicit constructions with "such as" and "which arise from" to define terms on first appearance.
+
+5. **Formal register.** Consistently selects the more formal alternative: "evaluated" over "tested", "protocols" over "procedures", "distinguishes" over "separates", "fluctuate" over "vary."
+
+6. **Adverb placement.** Prefers adverb before the past participle ("extensively applied", "widely recognized") rather than after ("applied extensively", "recognized widely").
+
+7. **"Both...and" with plural.** Uses "at both national and sectoral levels" rather than "at the national and sectoral level."
+
+8. **"Despite these advances" over "However."** For Move 3 gap-statement pivot, prefers "Despite these advances" as a concessive opener rather than a standalone "However" sentence. Note: "However," is still preferred for simple pivots (Move 2 style).
+
+9. **"Not yet been employed" over "not been applied."** Adds "yet" to signal temporal gap (no one has done this so far) and prefers "employed" over "applied" to avoid repeating "applied" (which appears in the preceding LMDI-applications sentences).
+
+10. **"Even though" subordinate clause.** Prefers embedding the consequence within the gap statement ("even though its definition can substantially affect the decomposition results") rather than using a relative clause ("whose definition materially alters the decomposition").
+
+**Safe academic verbs (from published AE papers):**
+demonstrates, confirms, identifies, establishes, quantifies, characterises, evaluates, indicates, suggests, attributes, presents, examines, compares, determines, reports, validates, proposes, employs, adopts, investigates
+
+**Test before submission:** Paste each section into Grammarly AI detector. Any phrase flagged above 10x must be rewritten before the section is considered complete.
