@@ -502,7 +502,7 @@ Applied Energy research articles typically fall in the 6000-8000 word range. The
 
 The allocation is flexible within the 6000-8000 envelope. If validation or results need more space, compress the literature review. The methodology section carries the most weight because the CRG boundary comparison is the paper's central methods contribution.
 
-**Actual word count (27 Jul 2026):** 7661 words body text (Sections 1-7). Within target.
+**Actual word count (27 Jul 2026):** ~9450 words body text (Sections 1-7). Above the 8000 upper target. Review Points 2-8 plus 10 minor comments applied. Key additions: LMDI justification (3.2), transition band sensitivity (3.3), regen bias quantification (3.3), Bolt regen validation (4.2), cross-vehicle confounding (5.2), boundary robustness and gear-ratio restructuring (Discussion). Minor fixes: CRG defined, UDDS/US06 expanded, "for the first time" reduced to one instance, Artemis residence-time wording sharpened, Table 1 footnote clarified. Five refs flagged for deletion during LaTeX (79, 86-89), two for fixing (71 preprint, 76 authors). Trimming needed in literature review or methodology.
 
 ---
 
@@ -600,7 +600,7 @@ Grammarly AI detection flags common AI-generated phrases. The following were ide
 
 ## 21. Author Style Preferences (Faisal Shah Khan)
 
-Observed from editorial passes on Introduction Moves 1-2 (July 2026). Apply throughout the manuscript.
+Observed from editorial passes on Introduction Moves 1-2 and Review Points 2-4 (July 2026). Apply throughout the manuscript.
 
 ### Word-level preferences
 
@@ -669,6 +669,22 @@ Observed from editorial passes on Introduction Moves 1-2 (July 2026). Apply thro
 | at the cost of | resulting in | participial over prepositional |
 | The speed at which this transition occurs | The transition speed between these regimes | noun phrase over relative clause |
 | how much of a given drive cycle falls within | the proportion of a drive cycle spent in | "proportion" over "how much" |
+| share | proportion | "proportion" over "share" when not in LMDI technical context |
+| demonstrates that | As demonstrated in | prefers participial lead when back-referencing a section |
+| Several conclusions are robust | Several findings remain robust | "findings" over "conclusions", "remain" over "are" |
+| The sign of the structural term is positive | The structural term remains positive | direct predicate over noun-subject construction |
+| since neither cycle reaches | as neither cycle attains | "as" over "since" (causal), "attains" over "reaches" |
+| The exact structural share | the precise structural share | "precise" over "exact" |
+| is not boundary-robust | is not robust to the boundary definition | explicit prepositional phrase over compound adjective |
+| this share ranges from | this share varies from | "varies" over "ranges" in sensitivity context |
+| depends on the boundary definition adopted | depends on the boundary definition employed | "employed" over "adopted" |
+| is unaffected by | remains unaffected by | adds "remains" for continuity |
+| depend solely on | depend exclusively on | "exclusively" over "solely" |
+| which is a function of | which is determined by | active verb over nominal "function of" |
+| however, absorbs | incorporates | "incorporates" over "absorbs" for the intensity term |
+| On highway and aggressive cycles | During highway and aggressive driving cycles | "During" + "driving cycles" explicit |
+| inflating the per-regime intensity | thereby increasing the per-regime intensity | "thereby increasing" over "inflating" |
+| the confounding direction is reversed | the direction of this confounding effect is reversed | explicit noun phrase |
 | other loss mechanisms | other loss factors | "factors" over "mechanisms" |
 | the structural fact of residing in that regime | the structural effect of regime residence | nominal form |
 | Connecting these lines of inquiry | Bridging these research areas | "Bridging" over "Connecting", "research areas" over "lines of inquiry" |
@@ -698,5 +714,13 @@ Observed from editorial passes on Introduction Moves 1-2 (July 2026). Apply thro
 
 **Safe academic verbs (from published AE papers):**
 demonstrates, confirms, identifies, establishes, quantifies, characterises, evaluates, indicates, suggests, attributes, presents, examines, compares, determines, reports, validates, proposes, employs, adopts, investigates
+
+11. **Qualify generalisations from limited samples.** When a finding is derived from n=2 vehicles or a small set, bound the claim: "for the two IPM machines evaluated" rather than "motor design determines regime exposure." The qualifier comes at the front of the sentence.
+
+12. **Semicolon to full stop for independent clauses.** Prefers splitting at semicolons into two sentences when the second clause introduces a new idea. Example: "under the CRG-derived boundary at 370 V. Across different voltage assumptions..." rather than "...at 370 V; across voltage assumptions..."
+
+13. **"88% to 99%" with % on both numbers.** When citing a range with percent, attach the symbol to both endpoints rather than only the second.
+
+14. **"The selection of" over "The choice of".** Prefers "selection" as more formal. Similarly "can alter" over "alters" when hedging is appropriate.
 
 **Test before submission:** Paste each section into Grammarly AI detector. Any phrase flagged above 10x must be rewritten before the section is considered complete.

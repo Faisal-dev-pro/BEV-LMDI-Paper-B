@@ -1,5 +1,5 @@
 %% AE_BoltEV_LMDI_Params.m
-%  Master parameter file — Chevrolet Bolt EV 2019 IPM (150 kW).
+%  Master parameter file — Chevrolet Bolt EV 2020 IPM (150 kW).
 %  Validated against ANL D3 dynamometer data (series 61910xxx / 61911xxx).
 %
 %  ARCHITECTURE: Simscape Electrical IPMSM + FOC controller + converter.
@@ -82,7 +82,7 @@ P.batt.Ah     = 60e3 / 350;   % [D] ~171.4 Ah (at V_nom = 350 V)
 P.batt.SOC0   = 95;           % [V] initial SOC [%]  ANL test start
 P.batt.Rint   = 0.05;         % [E] pack internal resistance [Ohm]
 
-% ----- Vehicle (Bolt EV 2019, Allca-Pekarovic 2024 + ANL TDMS) --------
+% ----- Vehicle (Bolt EV 2020, Allca-Pekarovic 2024 + ANL TDMS) --------
 P.veh.mass    = 1705;         % [V] test mass [kg]  Allca-Pekarovic (1625+80)
 P.veh.rw      = 0.317;        % [V] tyre rolling radius [m]  data-derived from
                                %     Motor_1_speed vs Vehicle_spd_CAN (std=0.0002m)

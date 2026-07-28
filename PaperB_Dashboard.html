@@ -336,7 +336,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 <div class="section-header">
   <span class="section-number">01</span>
   <span class="section-title">Project Overview</span>
-  <span class="section-subtitle">Updated 24 Jul 2026 &middot; 12/12 improvements done</span>
+  <span class="section-subtitle">Updated 27 Jul 2026 &middot; 12/12 improvements done &middot; Motor-level validation added</span>
 </div>
 
 <div class="kpi-grid">
@@ -364,9 +364,9 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
   </div>
   <div class="kpi kpi-pass">
     <div class="kpi-label">References</div>
-    <div class="kpi-value" style="color:var(--pass)">102</div>
+    <div class="kpi-value" style="color:var(--pass)">104</div>
     <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--pass)"></div></div>
-    <div class="kpi-sub">Target 60-70 exceeded<br>PaperB_References.md</div>
+    <div class="kpi-sub">Target 60-70 exceeded &middot; all cited<br>PaperB_References.md</div>
   </div>
 </div>
 
@@ -571,6 +571,86 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
   <span class="alert-icon">&#10003;</span>
   <span><strong>Complete single-variable FW sweep: +5.7 then +8.8 Wh/km BMS net per gear step, superlinear with FW share (0% &rarr; 51.3% &rarr; 81.9%).</strong> Identical vehicle, road load, and cycle at all three ratios; only the gear changed. The g=9.04&rarr;11 penalty is the largest of any cycle (US06 +6.4, WLTP +4.9), consistent with Artemis having the deepest FW operation. All runs passed both gear contamination guards. No ANL target for this cycle.</span>
 </div>
+</div>
+
+<!-- ═══════════════════════════ MOTOR-LEVEL VALIDATION ═══════════════════════════ -->
+<div class="section-header">
+  <span class="section-number">03a</span>
+  <span class="section-title">Motor-Level Validation (Hioki Power Analyser)</span>
+  <span class="section-subtitle">Added 27 Jul 2026 &middot; ANL Hioki P4 rear motor &middot; US06</span>
+</div>
+
+<div class="alert alert-purple">
+  <span class="alert-icon">&#9830;</span>
+  <span><strong>Review Point 2 (motor-level validation gap):</strong> The LMDI decomposition operates at the motor level, but Section 4 validation is at BMS terminals. The ANL D3 extended datasets include Hioki power analyser measurements on the inverter AC lines, enabling a direct motor-level energy check. Three valid US06 tests (62005016, 62006001, 62006005) confirm motor net energy within +2.0%. Test 62005018 excluded (phases 6+7 in that file are not US06: 1374 s, 91.6 km/h max, 303 V battery).</span>
+</div>
+
+<div class="card">
+<div class="card-header">
+  <div><div class="card-label">Tesla US06 &mdash; Motor-Level Energy (Hioki P4 Rear)</div><div class="card-title">3 repeat ANL tests vs Simscape v26 simulation (g = 9.04)</div></div>
+  <span class="badge badge-pass"><span class="badge-dot green"></span> +2.0%</span>
+</div>
+<table>
+<thead><tr><th>Quantity</th><th>62005016</th><th>62006001</th><th>62006005</th><th>Mean &plusmn; SD</th><th>Simulated</th><th>Error</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Motor net (Wh/km)</strong></td>
+  <td class="mono">144.9</td><td class="mono">142.1</td><td class="mono">138.5</td>
+  <td class="mono"><strong>141.8 &plusmn; 2.6</strong></td>
+  <td class="mono">139.1</td>
+  <td class="val-pass">+2.0%</td>
+</tr>
+<tr>
+  <td><strong>Motor gross (Wh/km)</strong></td>
+  <td class="mono">209.5</td><td class="mono">207.7</td><td class="mono">200.5</td>
+  <td class="mono"><strong>205.9 &plusmn; 3.9</strong></td>
+  <td class="mono">202.8</td>
+  <td class="val-pass">+1.5%</td>
+</tr>
+<tr>
+  <td><strong>Regen fraction (%)</strong></td>
+  <td class="mono">30.9</td><td class="mono">31.6</td><td class="mono">30.9</td>
+  <td class="mono"><strong>31.1</strong></td>
+  <td class="mono">31.4</td>
+  <td class="val-pass">-0.3 pp</td>
+</tr>
+<tr>
+  <td><strong>BMS net (Wh/km)</strong></td>
+  <td class="mono">157.6</td><td class="mono">154.2</td><td class="mono">161.6</td>
+  <td class="mono"><strong>157.8 &plusmn; 3.0</strong></td>
+  <td class="mono">148.7</td>
+  <td class="val-pass">+6.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="two-col">
+<div class="card">
+<div class="card-label">Auxiliary Power Back-Calculation</div>
+<table class="param-table">
+<tr><td>P_aux (Hioki + BMS)</td><td>654 W</td></tr>
+<tr><td>P_aux (model)</td><td>690 W</td></tr>
+<tr><td>Error</td><td style="color:var(--pass)">-5.2%</td></tr>
+</table>
+<div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px">From test 62006001. P_aux = (|BMS net| &minus; |motor rear net| &minus; |motor front net|) / time.</div>
+</div>
+<div class="card">
+<div class="card-label">Speed Profile Fidelity (distance shares)</div>
+<table class="param-table">
+<tr><td>v_FW threshold</td><td>117.6 km/h</td></tr>
+<tr><td>Measured FW share</td><td>7.5%</td></tr>
+<tr><td>Simulated FW share</td><td>7.3%</td></tr>
+<tr><td>Difference</td><td style="color:var(--pass)">+0.2 pp</td></tr>
+<tr><td>All thresholds 60&ndash;125</td><td style="color:var(--pass)">&plusmn;1.6 pp max</td></tr>
+</table>
+<div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px">Structural term depends on distance shares. Measured and simulated profiles match across the full speed range.</div>
+</div>
+</div>
+
+<div class="alert alert-info" style="margin-bottom:24px">
+  <span class="alert-icon">&#9432;</span>
+  <span><strong>Limitation:</strong> Per-regime intensities cannot be validated independently. The ANL CAN bus torque channel (DIF_torqueActual) reports only traction commands (33/5997 timesteps negative vs Hioki showing 31% regen). Without reliable regen torque, timestep-level regime classification during deceleration is not possible. However, +2.0% total motor agreement constrains per-regime errors: deviations in one regime must offset in another.</span>
 </div>
 
 <!-- ═══════════════════════════ RUN LOG ═══════════════════════════ -->
@@ -1462,7 +1542,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 <tr><td>LMDI + postprocessing</td><td>10 cycle pairs x 4 configs + design formula</td><td class="mono">3, 9</td><td>3 days</td></tr>
 <tr><td>Figures</td><td>10-12 figures: Sankey, design chart, tornado</td><td class="mono">7, 9</td><td>1 week</td></tr>
 <tr><td>Cross-validation</td><td>EPA/literature table</td><td class="mono">8, 11</td><td>2 days</td></tr>
-<tr style="background:var(--pass-bg)"><td><strong>Writing</strong></td><td>COMPLETE 27 Jul: 7661 words, 12 figures, 8 tables, 104 refs all cited. Figures renamed Fig1&ndash;Fig12. Pushed to GitHub f47dbca.</td><td class="mono">6, 10, 12</td><td>Done</td></tr>
+<tr style="background:var(--pass-bg)"><td><strong>Writing</strong></td><td>COMPLETE 27 Jul: ~9450 words, 12 figures, 8 tables, 104 refs all cited. Figures renamed Fig1&ndash;Fig12. Review Points 3-8 + 10 minor comments applied. 5 refs flagged (delete [79,86-89], fix [71,76]). Pushed to GitHub f47dbca.</td><td class="mono">6, 10, 12</td><td>Done</td></tr>
 <tr><td>Review</td><td>Faisal editing pass + DOI check + ref 89 duplicate removal + LaTeX conversion</td><td>&mdash;</td><td>1 week</td></tr>
 <tr style="border-top:2px solid var(--border)"><td colspan="3" style="font-weight:700;color:var(--text)">Total</td><td style="font-weight:700;color:var(--accent)">10-12 weeks</td></tr>
 </tbody>
@@ -1475,7 +1555,7 @@ td .detail { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
     <span>BEV LMDI Decomposition &middot; Paper B</span>
     <span>AppliedEnergy_Paper/PaperB_Dashboard.html</span>
   </div>
-  <span>Updated 27 Jul 2026 &middot; 12/12 improvements done &middot; TESLA 15/15 &middot; BOLT 4/4 PASS &middot; All LMDI done &middot; 12 figures (Fig1&ndash;Fig12) &middot; 8 tables &middot; 104 refs all cited &middot; Draft complete (7661 words body) &middot; Pushed f47dbca</span>
+  <span>Updated 27 Jul 2026 &middot; 12/12 improvements &middot; TESLA 15/15 &middot; BOLT 4/4 &middot; Motor-level Hioki validation +2.0% (3 US06 tests) &middot; 12 figs &middot; 8 tables &middot; 104 refs &middot; Draft ~9450 words &middot; Review in progress</span>
 </div>
 
 </div><!-- .container -->
