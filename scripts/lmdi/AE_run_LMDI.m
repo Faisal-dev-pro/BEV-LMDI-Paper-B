@@ -1,4 +1,4 @@
-%% AE_run_LMDI.m — LMDI-I Decomposition (Paper B, Applied Energy)
+%% AE_run_LMDI.m — LMDI-I Decomposition (Paper B, Results in Engineering)
 %
 %  *** DEPRECATED 17 Jul 2026 — do not run. ***
 %  Superseded by AE_run_LMDI_matrix.m, which loads the 15 gear-verified

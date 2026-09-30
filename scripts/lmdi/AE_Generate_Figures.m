@@ -1,5 +1,5 @@
-%% AE_Generate_Figures.m — Paper B (Applied Energy) figures
-% Applied Energy publication figures — all exported as vector PDF
+%% AE_Generate_Figures.m — Paper B (Results in Engineering) figures
+% Results in Engineering publication figures — all exported as vector PDF
 % Paste into MATLAB workspace or run as script.
 %
 % Output:  Figures/Fig1_Topology.pdf  … Figures/Fig7_idiq.pdf
