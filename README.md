@@ -71,9 +71,12 @@ BEV_LMDI_Paper_B/
 │   │   ├── AE_cross_vehicle_LMDI.m    Tesla vs Bolt comparison
 │   │   ├── AE_gear_design.m           Gear ratio design analysis
 │   │   ├── FW_boundary_comparison.m   B1/B2/B3 boundary method sensitivity
+│   │   ├── AE_sankey_energy_flow.py   Sankey diagram data generation
 │   │   └── AE_Generate_Figures.m      Publication figure generation
 │   ├── figures/                    Figure generation scripts (12 figures)
-│   ├── gear_sweep/                 Gear ratio parametric run scripts
+│   ├── gear_sweep/                 Gear ratio parametric run scripts (15 scripts)
+│   ├── extraction/                 ANL data extraction
+│   │   └── extract_BMS_targets_v2.py  BMS target extraction from ANL CAN data
 │   ├── sensitivity/                Sensitivity sweep runner
 │   │   └── AE_sensitivity_sweep.m
 │   └── validation/                 Validation and postprocessing
