@@ -1,40 +1,53 @@
-# === ANL raw data (large, proprietary — cite anl.gov/d3) ===
+# =============================================================================
+# .gitignore — BEV LMDI Decomposition (Paper B)
+# Published: Results in Engineering (2026), DOI: 10.1016/j.rineng.2026.104192
+# =============================================================================
+
+# === Proprietary ANL dynamometer data (cite anl.gov/d3) ===
 data/anl_tesla/
 data/anl_bolt/
+2020 Tesla Model 3 ANL/
+chevrolet/2020 Chevrolet Bolt/
 
-# === Manuscript (under review, do not publish pre-acceptance) ===
+# === Manuscript and submission files ===
 manuscript/
 
 # === Copyrighted reference PDFs ===
 references/*.pdf
+chevrolet/references/*.pdf
 
-# === Internal project tracking ===
-dashboard/
-docs/PLAN_AE.md
-docs/AE_Positioning.md
-docs/ANL_energy_forensics.md
-docs/AUDIT_v26_presubmission.md
-docs/BMS_Extraction_Audit_Trail.txt
+# === Internal project documentation ===
+docs/
+
+# === Reference notes (internal) ===
 references/PaperB_References.md
 references/References_AE_2023_2025.md
 references/Bolt_Motor_Parameters.md
+
+# === Dashboard and tracking ===
+dashboard/
+PaperB_Dashboard.html
 
 # === Setup and deployment scripts ===
 complete_anl_data.sh
 setup_paper_b.sh
 
-# === Empty directories ===
+# === Personal / planning files (should not be in repo) ===
+LinkedIn_Profile_Draft.md
+PLAN_Paper_C.md
+manuscript_structure.md
+
+# === Empty placeholder directories ===
 figures/
 
 # === Intermediate extraction CSVs ===
 results/extraction/
 
-# === Legacy files ===
+# === Legacy model files ===
 model/AE_v25_Run.m
 
-# === Stale / duplicate simulation results ===
-# Keep only canonical run per cycle-config pair
-# g=9.04 duplicates (keep 0710/0711/0712 canonical runs only)
+# === Non-canonical simulation results ===
+# Tesla g=9.04: keep only canonical 0710/0711/0712 runs
 results/tesla_g9.04/BMS_UDDS_v26_20260713_021559.mat
 results/tesla_g9.04/BMS_UDDS_v26_20260714_092637.mat
 results/tesla_g9.04/BMS_US06_v26_20260712_144011.mat
@@ -42,28 +55,22 @@ results/tesla_g9.04/BMS_US06_v26_20260714_001504.mat
 results/tesla_g9.04/BMS_WLTP_v26_20260711_133350.mat
 results/tesla_g9.04/BMS_WLTP_v26_20260713_081328.mat
 results/tesla_g9.04/BMS_WLTP_v26_20260714_172410.mat
-# Artemis repeats (non-canonical)
 results/tesla_g9.04/BMS_ArtemisMW130_v26_20260713_*.mat
-# HWFET (fails validation +6.9%, deferred)
 results/tesla_g9.04/BMS_HWFET_*.mat
-
-# g=7.0 corrupted Artemis (Simscape cache issue)
 results/tesla_g7.0/BMS_ArtemisMW130_v26_g7.0_*.mat
-
-# g=11.0 stale WLTP (keep 20260714 only)
 results/tesla_g11.0/BMS_WLTP_v26_g11.0_20260711_133350.mat
 
-# === Raw ANL test data (large, proprietary) ===
-2020 Tesla Model 3 ANL/
-chevrolet/2020 Chevrolet Bolt/
-chevrolet/references/*.pdf
-
 # === Intermediate validation .mat files ===
-scripts/validation/BMS_US06_v26_g9.04_*.mat
+scripts/validation/*.mat
+
+# === Internal working notes ===
+scripts/lmdi/*_notes.md
+scripts/lmdi/*_expected_values.md
+scripts/lmdi/Cost_deployment_notes.md
 
 # === Simulink cache ===
 *.slxc
-slprj/
+**/slprj/
 
 # === MATLAB artifacts ===
 *.asv
