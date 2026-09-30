@@ -10,7 +10,7 @@ Author: F. Shah Khan, University of East London, July 2026
 import os, glob
 import numpy as np
 
-DATA_DIR = "/sessions/eloquent-magical-clarke/mnt/AppliedEnergy_Paper/2020 Tesla Model 3 ANL/Extended Datasets"
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'anl_tesla', 'Extended Datasets')
 
 # Reference distances and max speeds for identification
 CYCLE_SPECS = {
