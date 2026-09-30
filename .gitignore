@@ -80,3 +80,6 @@ scripts/lmdi/Cost_deployment_notes.md
 # === OS files ===
 .DS_Store
 Thumbs.db
+
+# === ANL test summary PDFs (redistribution caution) ===
+chevrolet/data/*.pdf
